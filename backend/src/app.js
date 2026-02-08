@@ -33,9 +33,12 @@ import inventoryRoutes from './routes/inventory.js';
 import borrowRoutes from './routes/borrowRequest.js';
 import authRoutes from './routes/auth.js';
 import userRoutes from './routes/user.js';
+import eventsRoutes from './routes/events.js';
+
+app.use('/events', eventsRoutes(db));
 
 app.use('/inventory', inventoryRoutes(db));  
-app.use('/borrow', borrowRoutes);
+app.use('/borrow', borrowRoutes(db));
 app.use('/auth', authRoutes(db));
 app.use('/user', userRoutes(db));
 export default app;

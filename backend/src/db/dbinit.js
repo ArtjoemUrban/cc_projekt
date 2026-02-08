@@ -60,28 +60,46 @@ CREATE TABLE IF NOT EXISTS Borrows (
 `);
 
 db.exec(`
--- Events (Kalender)
-CREATE TABLE IF NOT EXISTS event (
+
+CREATE TABLE IF NOT EXISTS events (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   title TEXT NOT NULL,
   description TEXT,
+  location TEXT,
   start_datetime TEXT NOT NULL,
   end_datetime TEXT NOT NULL,
   created_by INTEGER,
-  FOREIGN KEY (created_by) REFERENCES user(id)
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (created_by) REFERENCES users(id)
 );
 
--- Öffnungszeiten
+
 CREATE TABLE IF NOT EXISTS opening_hours (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   weekday INTEGER NOT NULL, -- 0 = Montag ... 6 = Sonntag
   open_time TEXT NOT NULL,
   close_time TEXT NOT NULL,
   updated_by INTEGER,
-  FOREIGN KEY (updated_by) REFERENCES user(id)
+  FOREIGN KEY (updated_by) REFERENCES users(id)
 );
 
--- Ferien / Feiertage / Sonderzeiträume
+CREATE TABLE IF NOT EXISTS shifts (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  date TEXT NOT NULL,
+  start_time TEXT NOT NULL,
+  end_time TEXT NOT NULL,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS shift_users (
+  shift_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
+  PRIMARY KEY (shift_id, user_id),
+);
+
+
 CREATE TABLE IF NOT EXISTS calendar_periods (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   start_date TEXT NOT NULL,
@@ -89,7 +107,7 @@ CREATE TABLE IF NOT EXISTS calendar_periods (
   type TEXT NOT NULL, -- holiday | vacation | closed | special
   label TEXT,
   created_by INTEGER,
-  FOREIGN KEY (created_by) REFERENCES user(id)
+  FOREIGN KEY (created_by) REFERENCES users(id)
 );
 `);
 }

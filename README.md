@@ -60,3 +60,23 @@ erDiagram
         string status
     }
 ```
+
+--- 
+
+# Routen
+
+ ### /auth
+ - /register
+ - /login
+
+ ### user 
+
+ ### events
+
+ ### oppening_hours
+
+ ###  holidays
+
+ ### inventory
+
+ ### borrow_requests
