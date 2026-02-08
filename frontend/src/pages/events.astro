@@ -1,0 +1,15 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getEvents } from "../lib/api.ts";
+
+const events = await getEvents();
+---
+
+<Layout title="Events">
+  <h1>Events</h1>
+  <ul>
+    {events.map(e => (
+      <li>{e.title} – {e.date}</li>
+    ))}
+  </ul>
+</Layout>

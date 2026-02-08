@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Test Frontend</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+    }
+    input, button {
+      display: block;
+      margin: 8px 0;
+      padding: 6px;
+      width: 100%;
+    }
+    section {
+      border: 1px solid #ccc;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Admin Test Frontend</h1>
+
+  <!-- LOGIN -->
+  <section>
+    <h2>Login</h2>
+    <input id="login-username" placeholder="Username" />
+    <input id="login-password" type="password" placeholder="Password" />
+    <button onclick="login()">Login</button>
+    <p id="login-status"></p>
+  </section>
+
+  <!-- USER ERSTELLEN -->
+  <section>
+    <h2>Neuen User erstellen (Admin)</h2>
+    <input id="new-username" placeholder="Neuer Username" />
+    <input id="new-password" type="password" placeholder="Neues Passwort" />
+    <select id="new-role">
+      <option value="user">user</option>
+      <option value="admin">admin</option>
+      <option value="test">invalid (test)</option>
+    </select>
+    <button onclick="createUser()">User erstellen</button>
+    <p id="create-status"></p>
+  </section>
+
+  <script>
+    const API_URL = "http://localhost:3000";
+ 
+    async function login() {
+      const username = document.getElementById("login-username").value;
+      const password = document.getElementById("login-password").value;
+
+      const res = await fetch(`${API_URL}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({  username, password })
+      });
+
+      if (!res.ok) {
+        document.getElementById("login-status").innerText = "❌ Login fehlgeschlagen";
+        return;
+      }
+
+      const data = await res.json();
+      localStorage.setItem("token", data.token);
+      document.getElementById("login-status").innerText = "✅ Login erfolgreich";
+    }
+
+    async function createUser() {
+      const token = localStorage.getItem("token");
+     
+
+      const username = document.getElementById("new-username").value;
+      const password = document.getElementById("new-password").value;
+      const role = document.getElementById("new-role").value;
+
+      const res = await fetch(`${API_URL}/auth/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ username, password, role })
+      });
+
+      if (!res.ok) {
+        document.getElementById("create-status").innerText =
+          "❌ User konnte nicht erstellt werden (kein Admin?)";
+        return;
+      }
+
+      document.getElementById("create-status").innerText = "✅ User erstellt";
+    }
+  </script>
+
+</body>
+</html>

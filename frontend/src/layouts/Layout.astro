@@ -1,0 +1,27 @@
+---
+
+import '../styles/global.css' 
+
+const { title = "Fachschaft" } = Astro.props;
+
+---
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>{title}</title>
+</head>
+<body>
+  <nav>
+    <a href="/">Start</a>
+    <a href="/events">Events</a>
+    <a href="/inventory">Inventar</a>
+    <a href="/office-hours">Öffnungszeiten</a>
+  </nav>
+
+  <main>
+    <slot />
+  </main>
+</body>
+</html>
