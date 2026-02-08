@@ -65,18 +65,68 @@ erDiagram
 
 # Routen
 
- ### /auth
- - /register
- - /login
+Basis-Pfade gemäß app.js:
+- /health
+- /auth
+- /user
+- /events
+- /inventory
+- /borrow
 
- ### user 
+### /health
+- GET /health
 
- ### events
+### /auth
+- POST /auth/register
+- POST /auth/login
 
- ### oppening_hours
+### /user
+- GET /user/me
+- GET /user
+- GET /user/:username
+- DELETE /user/:username
+- PUT /user/change-password
+- PUT /user/change-username
+- PUT /user/change-role
 
- ###  holidays
+### /events
+- POST /events/events
+- GET /events/events
+- GET /events/events/:id
+- PUT /events/events/:id
+- DELETE /events/events/:id
 
- ### inventory
+### /inventory
+- GET /inventory
+- GET /inventory/available
+- GET /inventory/categories
+- GET /inventory/:id
+- POST /inventory
+- PATCH /inventory/:id
+- DELETE /inventory/:id
 
- ### borrow_requests
+### /borrow
+- POST /borrow/borrow-request
+- GET /borrow/borrow-requests
+- GET /borrow/borrow-requests/:id
+- DELETE /borrow/borrow-requests/:id
+- POST /borrow/borrow-requests/:id/approve
+- POST /borrow/borrow-requests/:id/reject
+- PUT /borrow/borrow-requests/:id/return
+
+### (noch nicht in app.js eingebunden)
+
+#### /opening-hours
+- POST /opening-hours
+- GET /opening-hours
+- PUT /opening-hours/:id
+- DELETE /opening-hours/:id
+
+#### /shifts
+- GET /shifts
+- GET /shifts/:id
+- POST /shifts
+- PUT /shifts/:id
+- DELETE /shifts/:id
+- POST /shifts/:id/join
+- POST /shifts/:id/leave
