@@ -4,17 +4,17 @@ import { verifyJwt } from "../middleware/authMiddleware.js";
 export default function openingHoursRoutes(db) {
   const router = Router();
 
-  router.get("/shifts", (req, res) => {
+  router.get("/", (req, res) => {
     try {
       const stmt = db.prepare("SELECT * FROM shifts");
       const shifts = stmt.all();
       res.status(200).json(shifts);
     } catch (error) {
-      res.status(500).json({ message: "Failed to fetch shifts" });
+      res.status(500).json({ message: "Internal Server Error" });
     }
   });
 
-  router.get("/shifts/:id", (req, res) => {
+  router.get("/:id", (req, res) => {
     const id = req.params.id;
     try {
       const stmt = db.prepare("SELECT * FROM shifts WHERE id = ?");
@@ -24,33 +24,33 @@ export default function openingHoursRoutes(db) {
       }
       res.status(200).json(shift);
     } catch (error) {
-      res.status(500).json({ message: "Failed to fetch shift" });
+      res.status(500).json({ message: "Internal Server Error" });
     }
   });
 
-  router.post("/shifts", verifyJwt, (req, res) => {
+  router.post("/", verifyJwt, (req, res) => {
     const body = req.body || {};
-    const requiredFields = ["user_id", "start_time", "end_time"];
+    const requiredFields = ["user_id", "date", "start_time", "end_time"];
     const missing = requiredFields.filter((field) => !body[field]);
     if (missing.length > 0) {
       return res
         .status(400)
         .json({ message: `Missing fields: ${missing.join(", ")}` });
     }
-    const { user_id, start_time, end_time } = body;
+    const { user_id, date, start_time, end_time } = body;
 
     try {
       const stmt = db.prepare(
-        "INSERT INTO shifts (user_id, start_time, end_time) VALUES (?, ?, ?)"
+        "INSERT INTO shifts (user_id, date, start_time, end_time) VALUES (?, ?, ?, ?)"
       );
-      stmt.run(user_id, start_time, end_time);
+      stmt.run(user_id, date, start_time, end_time);
       res.status(201).json({ message: "Shift created successfully" });
     } catch (error) {
-      res.status(500).json({ message: "Failed to create shift" });
+      res.status(500).json({ message: "Internal Server Error" });
     }
   });
 
-  router.delete("/shifts/:id", verifyJwt, (req, res) => {
+  router.delete("/:id", verifyJwt, (req, res) => {
     const id = req.params.id;
     try {
       const stmt = db.prepare("DELETE FROM shifts WHERE id = ?");
@@ -60,11 +60,11 @@ export default function openingHoursRoutes(db) {
       }
       res.status(200).json({ message: "Shift deleted successfully" });
     } catch (error) {
-      res.status(500).json({ message: "Failed to delete shift" });
+      res.status(500).json({ message: "Internal Server Error" });
     }
   });
 
-  router.put("/shifts/:id", verifyJwt, (req, res) => {
+  router.put("/:id", verifyJwt, (req, res) => {
     const id = req.params.id;
     const body = req.body || {};
     const { user_id, start_time, end_time } = body;
@@ -79,11 +79,11 @@ export default function openingHoursRoutes(db) {
       }
       res.status(200).json({ message: "Shift updated successfully" });
     } catch (error) {
-      res.status(500).json({ message: "Failed to update shift" });
+      res.status(500).json({ message: "Internal Server Error" });
     }
   });
 
-  router.post("/shifts/:id/join", verifyJwt, (req, res) => {
+  router.post("/:id/join", verifyJwt, (req, res) => {
     const id = req.params.id;
     try {
       const getShiftStmt = db.prepare("SELECT * FROM shifts WHERE id = ?");
@@ -97,11 +97,11 @@ export default function openingHoursRoutes(db) {
 
       res.status(200).json({ message: "Joined shift successfully" });
     } catch (error) {
-      res.status(500).json({ message: "Failed to join shift" });
+      res.status(500).json({ message: "Internal Server Error" });
     }
   });
 
-    router.post("/shifts/:id/leave", verifyJwt, (req, res) => {
+    router.post("/:id/leave", verifyJwt, (req, res) => {
     const id = req.params.id;
     try {
       const getShiftStmt = db.prepare("SELECT * FROM shifts WHERE id = ?");
@@ -118,7 +118,7 @@ export default function openingHoursRoutes(db) {
 
       res.status(200).json({ message: "Left shift successfully" });
     } catch (error) {
-      res.status(500).json({ message: "Failed to leave shift" });
+      res.status(500).json({ message: "Internal Server Error" });
     }
   });
 

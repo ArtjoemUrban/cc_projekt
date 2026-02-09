@@ -11,7 +11,7 @@ db.exec(`
 -- Benutzer
 CREATE TABLE IF NOT EXISTS users (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  username TEXT NOT NULL,
+  username TEXT NOT NULL UNIQUE,
   password_hash TEXT NOT NULL,
   role Text NOT NULL CHECK (role IN ('admin', 'user')),
   -- active INTEGER DEFAULT 1,
@@ -30,26 +30,28 @@ CREATE TABLE IF NOT EXISTS inventory (
   description TEXT,
   category TEXT NOT NULL,
   is_available INTEGER DEFAULT 1,
-  is_for_borrow BOOLEAN DEFAULT TRUE  
+  is_for_borrow BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE IF NOT EXISTS borrow_request (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  inventory_id INTEGER NOT NULL, 
-  guest_name TEXT,
-  guest_email TEXT,
+  item_id INTEGER NOT NULL,
+  quantity INTEGER NOT NULL,
+  borrower_name TEXT,
+  borrower_email TEXT,
   start_date TEXT,
   end_date TEXT,
-  status TEXT DEFAULT 'pending',
+  status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
   answered_by INTEGER,
   created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (inventory_id) REFERENCES inventory(id),
-  FOREIGN KEY (answered_by) REFERENCES user(id)
+  FOREIGN KEY (item_id) REFERENCES inventory(id),
+  FOREIGN KEY (answered_by) REFERENCES users(id)
 );
 
-CREATE TABLE IF NOT EXISTS Borrows (
+CREATE TABLE IF NOT EXISTS borrows (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   item_id INTEGER NOT NULL,
+  quantity INTEGER NOT NULL,
   borrower_name TEXT NOT NULL,
   borrower_email TEXT NOT NULL,
   borrow_date TEXT NOT NULL,
@@ -96,7 +98,7 @@ CREATE TABLE IF NOT EXISTS shifts (
 CREATE TABLE IF NOT EXISTS shift_users (
   shift_id INTEGER NOT NULL,
   user_id INTEGER NOT NULL,
-  PRIMARY KEY (shift_id, user_id),
+  PRIMARY KEY (shift_id, user_id)
 );
 
 

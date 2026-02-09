@@ -14,7 +14,7 @@ export default function userRoutes(db) {
         res.status(200).json(user);
         } catch (error) { 
             console.error("Error fetching user data:", error);
-            res.status(500).json({ message: "Internal server error" });
+            res.status(500).json({ message: "Internal Server Error" });
         }
     });
 
@@ -24,6 +24,16 @@ export default function userRoutes(db) {
         res.status(200).json(users);
     });
     
+    router.get("/id/:id", verifyJwt, async (req, res) => {
+        console.log(`Fetching user with id: ${req.params.id}`);
+        const user = db.prepare("SELECT id, username, role, created_at, updated_at FROM users WHERE id = ?").get(req.params.id);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.status(200).json(user);
+    });
+
+    
      router.get("/:username", verifyJwt, async (req, res) => {
         console.log(`Fetching user with username: ${req.params.username}`);
         const user = db.prepare("SELECT id, username, role, created_at, updated_at FROM users WHERE username = ?").get(req.params.username);
@@ -31,8 +41,9 @@ export default function userRoutes(db) {
             return res.status(404).json({ message: "User not found" });
         }
         res.status(200).json(user);
-    }); 
+    });
 
+    
     
 
     // Nur Admins können einen User löschen
@@ -72,7 +83,7 @@ export default function userRoutes(db) {
         res.json({ message: "Password changed successfully" });
     } catch (error) {
         console.error("Error during password change:", error);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ message: "Internal Server Error" });
     }
   });
 
@@ -105,7 +116,7 @@ export default function userRoutes(db) {
         res.json({ message: "Username changed successfully" });
     } catch (error) {
         console.error("Error during username change:", error);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ message: "Internal Server Error" });
     } 
   });
 
@@ -134,7 +145,7 @@ export default function userRoutes(db) {
         res.json({ message: "User role updated successfully" });
     } catch (error) {
         console.error("Error during role change:", error);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ message: "Internal Server Error" });
     } 
   });
 

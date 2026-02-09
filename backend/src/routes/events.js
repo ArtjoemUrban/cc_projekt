@@ -4,18 +4,18 @@ import { verifyJwt } from '../middleware/authMiddleware.js';
 export default function eventsRoutes(db) {
   const router = Router();
 
-  router.post('/events', verifyJwt, (req, res) => {
+  router.post('/', verifyJwt, (req, res) => {
     const body = req.body || {};
-    const requiredFields = ['name', 'start_datetime', 'end_datetime', 'location'];
+    const requiredFields = ['title', 'start_datetime', 'end_datetime', 'location'];
     const missing = requiredFields.filter(field => !body[field]);
     if (missing.length > 0) {
       return res.status(400).json({ message: `Missing fields: ${missing.join(', ')}` });
     }
-    const { name, start_datetime, end_datetime, location } = body;
+    const { title, start_datetime, end_datetime, location } = body;
 
     try {
-      const stmt = db.prepare('INSERT INTO events (name, start_datetime, end_datetime, location) VALUES (?, ?, ?, ?)');
-      stmt.run(name, start_datetime, end_datetime, location);
+      const stmt = db.prepare('INSERT INTO events (title, start_datetime, end_datetime, location) VALUES (?, ?, ?, ?)');
+      stmt.run(title, start_datetime, end_datetime, location);
       res.status(201).json({ message: 'Event created successfully' });
     } catch (error) {
       console.error('Error creating event:', error);
@@ -25,7 +25,7 @@ export default function eventsRoutes(db) {
 
 
 
-  router.get('/events',  (req, res) => {
+  router.get('/',  (req, res) => {
     try {
       const stmt = db.prepare("SELECT * FROM events");
       const events = stmt.all();
@@ -36,7 +36,7 @@ export default function eventsRoutes(db) {
     }   
   });
 
-  router.get('/events/:id', (req, res) => {
+  router.get('/:id', (req, res) => {
     const id = req.params.id;
     try {
       const stmt = db.prepare("SELECT * FROM events WHERE id = ?");
@@ -51,7 +51,7 @@ export default function eventsRoutes(db) {
     }   
   });
 
-  router.delete('/events/:id', verifyJwt, (req, res) => {
+  router.delete('/:id', verifyJwt, (req, res) => {
     const id = req.params.id;
     try {
       const stmt = db.prepare("DELETE FROM events WHERE id = ?");
@@ -66,7 +66,7 @@ export default function eventsRoutes(db) {
     }   
   });
 
- router.put('/events/:id', verifyJwt, (req, res) => {
+ router.put('/:id', verifyJwt, (req, res) => {
     const id = req.params.id;
     const body = req.body || {};
 
@@ -76,16 +76,16 @@ export default function eventsRoutes(db) {
         return res.status(404).json({ message: "Event not found" });
         }
 
-        const name = body.name ?? existing.name;
+        const title = body.title ?? existing.title;
         const start_datetime = body.start_datetime ?? existing.start_datetime;
         const end_datetime = body.end_datetime ?? existing.end_datetime;
         const location = body.location ?? existing.location;
         const description = body.description ?? existing.description;
 
         const stmt = db.prepare(
-        "UPDATE events SET name = ?, start_datetime = ?, end_datetime = ?, location = ?, description = ? WHERE id = ?"
+        "UPDATE events SET title = ?, start_datetime = ?, end_datetime = ?, location = ?, description = ? WHERE id = ?"
         );
-        stmt.run(name, start_datetime, end_datetime, location, description, id);
+        stmt.run(title, start_datetime, end_datetime, location, description, id);
 
         res.status(200).json({ message: "Event updated successfully" });
     } catch (error) {

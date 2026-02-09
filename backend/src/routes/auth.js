@@ -38,7 +38,7 @@ export default function authRoutes(db) {
         res.status(201).json({ message: "User registered successfully", userId: result.lastInsertRowid });
     } catch (error) {
         console.error("Error during registration:", error);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ message: "Internal Server Error" });
     }
   });
 
@@ -68,7 +68,7 @@ export default function authRoutes(db) {
         res.json({ message: "Login successful", token });
     } catch (error) {
         console.error("Error during login:", error);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ message: "Internal Server Error" });
     }
   });
 

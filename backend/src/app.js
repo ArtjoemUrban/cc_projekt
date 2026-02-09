@@ -1,11 +1,10 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-dotenv.config();
-import betterSqlite3 from 'better-sqlite3';
 import db from './db/db.js';
 import bycrypt from 'bcrypt';
 
+dotenv.config();
 const app = express();
 
 app.use(cors());
@@ -30,13 +29,17 @@ import healthRoutes from './routes/health.routes.js';
 app.use(healthRoutes);
 
 import inventoryRoutes from './routes/inventory.js';
-import borrowRoutes from './routes/borrowRequest.js';
+import borrowRoutes from './routes/borrow.js';
 import authRoutes from './routes/auth.js';
 import userRoutes from './routes/user.js';
 import eventsRoutes from './routes/events.js';
+import shiftsRoutes from './routes/shifts.js';
+import openingHoursRoutes from './routes/openingHours.js';
 
+
+app.use('/shifts', shiftsRoutes(db));
+app.use('/opening-hours', openingHoursRoutes(db));
 app.use('/events', eventsRoutes(db));
-
 app.use('/inventory', inventoryRoutes(db));  
 app.use('/borrow', borrowRoutes(db));
 app.use('/auth', authRoutes(db));
