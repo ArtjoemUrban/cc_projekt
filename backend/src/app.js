@@ -19,29 +19,27 @@ if (!adminUser) {
     const salt  = bycrypt.genSaltSync(10);
 
     const passwordHash =  bycrypt.hashSync(process.env.INITIAL_ADMIN_PASSWORD, salt);  
-    db.prepare("INSERT INTO users (username, password_hash, role, created_at) VALUES (?, ?, 'admin', CURRENT_TIMESTAMP )").run(process.env.INITIAL_ADMIN_USER, passwordHash);
+    db.prepare("INSERT INTO users (prename, surname, email, username,password, role, created_at) VALUES ('admin', 'admin','placeholder', ?, ?, 'admin', CURRENT_TIMESTAMP )").run(process.env.INITIAL_ADMIN_USER, passwordHash);
     console.log(`Admin user '${process.env.INITIAL_ADMIN_USER}' created.`);
 } else {
     //console.log(`Admin user '${process.env.INITIAL_ADMIN_USER}' already exists.`);
 }
 
-import healthRoutes from './routes/health.routes.js';
-app.use(healthRoutes);
+
 
 import inventoryRoutes from './routes/inventory.js';
-import borrowRoutes from './routes/borrow.js';
+import borrowRoutes from './routes/borrows.js';
 import authRoutes from './routes/auth.js';
 import userRoutes from './routes/user.js';
 import eventsRoutes from './routes/events.js';
-import shiftsRoutes from './routes/shifts.js';
 import openingHoursRoutes from './routes/openingHours.js';
+import calendarPeriodsRoutes from './routes/calendarPeriods.js';
 
-
-app.use('/shifts', shiftsRoutes(db));
 app.use('/opening-hours', openingHoursRoutes(db));
 app.use('/events', eventsRoutes(db));
 app.use('/inventory', inventoryRoutes(db));  
-app.use('/borrow', borrowRoutes(db));
+app.use('/borrows', borrowRoutes(db));
 app.use('/auth', authRoutes(db));
 app.use('/user', userRoutes(db));
+app.use('/calendar-periods', calendarPeriodsRoutes(db));
 export default app;

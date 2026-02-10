@@ -7,7 +7,7 @@ export default function userRoutes(db) {
 
     router.get("/me", verifyJwt, async (req, res) => {
         try {
-        const user = db.prepare("SELECT id, username, role, created_at, updated_at FROM users WHERE id = ?").get(req.user.id);
+        const user = db.prepare("SELECT * FROM users WHERE id = ?").get(req.user.id);
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -20,23 +20,31 @@ export default function userRoutes(db) {
 
     router.get("/",  verifyJwt, async (req, res) => {
         console.log("Fetching all users");
-        const users = db.prepare("SELECT id, username, role, created_at, updated_at FROM users").all();
+        const users = db.prepare("SELECT * FROM users").all();
         res.status(200).json(users);
     });
     
     router.get("/id/:id", verifyJwt, async (req, res) => {
         console.log(`Fetching user with id: ${req.params.id}`);
-        const user = db.prepare("SELECT id, username, role, created_at, updated_at FROM users WHERE id = ?").get(req.params.id);
+        const user = db.prepare("SELECT * FROM users WHERE id = ?").get(req.params.id);
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
         res.status(200).json(user);
     });
 
-    
-     router.get("/:username", verifyJwt, async (req, res) => {
+     router.get("/username/:username", verifyJwt, async (req, res) => {
         console.log(`Fetching user with username: ${req.params.username}`);
-        const user = db.prepare("SELECT id, username, role, created_at, updated_at FROM users WHERE username = ?").get(req.params.username);
+        const user = db.prepare("SELECT * FROM users WHERE username = ?").get(req.params.username);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.status(200).json(user);
+    });
+
+    router.get("/email/:email", verifyJwt, async (req, res) => {
+        console.log(`Fetching user with email: ${req.params.email}`);
+        const user = db.prepare("SELECT * FROM users WHERE email = ?").get(req.params.email);
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -47,7 +55,7 @@ export default function userRoutes(db) {
     
 
     // Nur Admins können einen User löschen
-    router.delete("/:username", verifyJwt, isAdmin, async (req, res) => {
+    router.delete("/username/:username", verifyJwt, isAdmin, async (req, res) => {
         console.log(`Deleting user with username: ${req.params.username}`);
         const result = db.prepare("DELETE FROM users WHERE username = ?").run(req.params.username);
         if (result.changes === 0) {
@@ -130,7 +138,7 @@ export default function userRoutes(db) {
             return res.status(400).json({ message: `Missing fields: ${missing.join(", ")}` });
         }
         const { username, newRole } = body;
-        const allowedRoles = ["admin", "user"];
+        const allowedRoles = ["admin", "contributor", "member"];
         if (!allowedRoles.includes(newRole)) {
             return res.status(400).json({ message: `Invalid role. Allowed roles are: ${allowedRoles.join(", ")}` });
         }

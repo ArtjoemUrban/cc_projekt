@@ -1,21 +1,20 @@
 import {Router} from 'express';
-import { verifyJwt } from '../middleware/authMiddleware.js';
+import { verifyJwt, isAdmin } from '../middleware/authMiddleware.js';
+import { checkRequiredFields } from '../middleware/missingFields.js';
 
 export default function eventsRoutes(db) {
   const router = Router();
 
-  router.post('/', verifyJwt, (req, res) => {
+  router.post('/', verifyJwt, isAdmin, (req, res) => {
     const body = req.body || {};
-    const requiredFields = ['title', 'start_datetime', 'end_datetime', 'location'];
-    const missing = requiredFields.filter(field => !body[field]);
-    if (missing.length > 0) {
-      return res.status(400).json({ message: `Missing fields: ${missing.join(', ')}` });
-    }
-    const { title, start_datetime, end_datetime, location } = body;
+    const requiredFields = ['title', 'start_time', 'end_time'];
+    checkRequiredFields(requiredFields)(req, res, () => {});
+    const { title,description, start_time, end_time, location, host_id, host_name } = body;
+    const createdBy = req.user.id; 
 
     try {
-      const stmt = db.prepare('INSERT INTO events (title, start_datetime, end_datetime, location) VALUES (?, ?, ?, ?)');
-      stmt.run(title, start_datetime, end_datetime, location);
+      const stmt = db.prepare('INSERT INTO events (title, description, start_time, end_time, location, host_id, host_name, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
+      stmt.run(title, description, start_time, end_time, location, host_id, host_name, createdBy);
       res.status(201).json({ message: 'Event created successfully' });
     } catch (error) {
       console.error('Error creating event:', error);
@@ -51,7 +50,7 @@ export default function eventsRoutes(db) {
     }   
   });
 
-  router.delete('/:id', verifyJwt, (req, res) => {
+  router.delete('/:id', verifyJwt, isAdmin, (req, res) => {
     const id = req.params.id;
     try {
       const stmt = db.prepare("DELETE FROM events WHERE id = ?");
@@ -66,7 +65,7 @@ export default function eventsRoutes(db) {
     }   
   });
 
- router.put('/:id', verifyJwt, (req, res) => {
+ router.put('/:id', verifyJwt, isAdmin, (req, res) => {
     const id = req.params.id;
     const body = req.body || {};
 
@@ -77,15 +76,18 @@ export default function eventsRoutes(db) {
         }
 
         const title = body.title ?? existing.title;
-        const start_datetime = body.start_datetime ?? existing.start_datetime;
-        const end_datetime = body.end_datetime ?? existing.end_datetime;
+        const start_time = body.start_time ?? existing.start_time;
+        const end_time = body.end_time ?? existing.end_time;
         const location = body.location ?? existing.location;
         const description = body.description ?? existing.description;
+        const host_id = body.host_id ?? existing.host_id;
+        const host_name = body.host_name ?? existing.host_name;
+        const updatedBy = req.user.id;
 
         const stmt = db.prepare(
-        "UPDATE events SET title = ?, start_datetime = ?, end_datetime = ?, location = ?, description = ? WHERE id = ?"
+        "UPDATE events SET title = ?, start_time = ?, end_time = ?, location = ?, description = ?, host_id = ?, host_name = ?, updated_by = ? WHERE id = ?"
         );
-        stmt.run(title, start_datetime, end_datetime, location, description, id);
+        stmt.run(title, start_time, end_time, location, description, host_id, host_name, updatedBy, id);
 
         res.status(200).json({ message: "Event updated successfully" });
     } catch (error) {

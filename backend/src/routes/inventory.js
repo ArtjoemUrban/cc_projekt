@@ -1,12 +1,13 @@
 import { Router } from "express";
 import {verifyJwt, isAdmin} from "../middleware/authMiddleware.js";
+import { checkRequiredFields } from "../middleware/missingFields.js";
 
 export default function  inventoryRoutes(db) {
   const router = Router();
 
   router.get("/available", (req, res) => {
     try {
-      const stmt = db.prepare("SELECT * FROM inventory WHERE is_available = 1");
+      const stmt = db.prepare("SELECT * FROM inventory WHERE is_quantity_available > 0");
       const items = stmt.all();
       res.status(200).json(items);
     } catch (error) {
@@ -15,10 +16,10 @@ export default function  inventoryRoutes(db) {
     }
   });
 
-  router.get("/categories", (req, res) => {
+  router.get("/categories/:category", (req, res) => {
     try {
-      const stmt = db.prepare("SELECT DISTINCT category FROM inventory");
-      const categories = stmt.all().map(row => row.category);
+      const stmt = db.prepare("SELECT  * FROM inventory WHERE category = ?");
+      const categories = stmt.all(req.params.category);
       res.status(200).json(categories);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -55,19 +56,16 @@ export default function  inventoryRoutes(db) {
   router.post("/", verifyJwt, isAdmin, (req, res) => {
     const body = req.body || {};
     const requiredFields = ["name", "quantity", "category"];
-    const missing = requiredFields.filter(field => !body[field]);
-    if (missing.length > 0) {
-        return res.status(400).json({ message: `Missing fields: ${missing.join(", ")}` });
-    }
+    checkRequiredFields(requiredFields)(req, res, () => {});
     
-    const { name, quantity, description, category, is_available, is_for_borrow } = body;
+    const { name, quantity, category, description, picture_url, is_for_borrow } = body;
     try {
       const stmt = db.prepare(`
-        INSERT INTO inventory (name, quantity, description, category, is_available, is_for_borrow) 
-        VALUES (?, ?, ?, ?, ?, ?)`);
-      const info = stmt.run(name, quantity, description || null, category, is_available ? 1 : 0, is_for_borrow ? 1 : 0);
+        INSERT INTO inventory (name, quantity, quantity_available, description, category, picture_url, is_for_borrow) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)`);
+      const info = stmt.run(name, quantity, quantity, description || null, category, picture_url || null,  is_for_borrow ? 1 : 0);
 
-      res.status(201).json({ id: info.lastInsertRowid, name, quantity, description, category, is_available, is_for_borrow });
+      res.status(201).json({ id: info.lastInsertRowid, name, quantity, description, category, picture_url, is_for_borrow });
     } catch (error) {
       console.error("Error adding inventory item:", error);
       res.status(500).json({ message: "Internal Server Error" });
@@ -86,13 +84,13 @@ export default function  inventoryRoutes(db) {
         return res.status(404).json({ message: "Inventory item not found" });
       }
 
-      const { name, quantity, description, category, is_available, is_for_borrow } = req.body;
+      const { name, quantity,  description, category, picture_url, is_for_borrow } = req.body;
       const stmt = db.prepare(`
         UPDATE inventory 
-        SET name = ?, quantity = ?, description = ?, category = ?, is_available = ?, is_for_borrow = ?
+        SET name = ?, quantity = ?, quantity_available = ?, description = ?, category = ?, picture_url = ?, is_for_borrow = ?
         WHERE id = ?`);
-      stmt.run(name !== undefined ? name : item.name, quantity !== undefined ? quantity : item.quantity, description !== undefined ? description : item.description, category !== undefined ? category : item.category, 
-              typeof is_available === 'boolean' ? (is_available ? 1 : 0) : item.is_available, 
+      stmt.run(name !== undefined ? name : item.name, quantity !== undefined ? quantity : item.quantity, quantity !== undefined ? quantity : item.quantity, description !== undefined ? description : item.description, category !== undefined ? category : item.category, 
+              picture_url !== undefined ? picture_url : item.picture_url,
               typeof is_for_borrow === 'boolean' ? (is_for_borrow ? 1 : 0) : item.is_for_borrow,
                 id);
 
@@ -111,7 +109,7 @@ export default function  inventoryRoutes(db) {
         return res.status(404).json({ message: "Inventory item not found" });
       }
 
-      const borrowed = db.prepare("SELECT 1 FROM borrow_request WHERE item_id = ? AND status = 'approved'").get(id);
+      const borrowed = db.prepare("SELECT 1 FROM borrows WHERE item_id = ? AND status = 'approved'").get(id);
       if (borrowed) {
         return res.status(409).json({ message: "Cannot delete item that is currently borrowed" });
       }

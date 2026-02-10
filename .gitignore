@@ -1,2 +1,17 @@
 /.$Unbenanntes Diagramm.drawio.bkp
 /Unbenanntes Diagramm.drawio
+
+# Ignore node_modules
+node_modules/
+# Ignore build output
+dist/
+build/
+# Ignore environment variables
+.env
+# Ignore database files
+*.db
+# Ignore log files
+*.log
+# Ignore OS files
+.DS_Store
+Thumbs.db  
