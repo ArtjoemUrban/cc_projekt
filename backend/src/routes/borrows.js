@@ -1,9 +1,11 @@
 import { Router } from "express";
 import {verifyJwt, isAdmin} from "../middleware/authMiddleware.js";
 import { checkRequiredFields } from "../middleware/missingFields.js";
+import app from "../app.js";
 
 export default function borrowRoutes(db) {
   const router = Router();
+  
 
   router.get("/", verifyJwt, (req, res) => {
     try {
@@ -17,10 +19,12 @@ export default function borrowRoutes(db) {
         
   });
 
+  // evtl transaktions verwenden, damit beide queries entweder erfolgreich sind oder beide fehlschlagen
   router.post("/user", verifyJwt, (req, res) => {
     const body = req.body || {};
     const requiredFields = ["item_id","user_id","quantity", "start_date", "end_date"];
     checkRequiredFields(requiredFields)(req, res, () => {});
+
     
     const { item_id, user_id, quantity, start_date, end_date } = body;
     try {
@@ -72,6 +76,30 @@ export default function borrowRoutes(db) {
       res.status(500).json({ message: "Internal Server Error" });
     }
   });
+
+  /*const approveTransaction = db.transaction((borrowId) => {
+    const borrow = db.prepare("SELECT * FROM borrows WHERE id = ?").get(borrowId);
+    if (!borrow) {
+      throw new Error("Borrow record not found");
+    }
+    if (borrow.status !== 'pending') {
+      throw new Error("Only pending borrows can be approved");
+    }
+
+    const item = db.prepare("SELECT * FROM inventory WHERE id = ?").get(borrow.item_id);
+    if (!item) {
+      throw new Error("Inventory item not found");
+    }
+    if (item.quantity_available < borrow.quantity) {
+      throw new Error("Not enough items available to approve this borrow");
+    }
+
+    const updateBorrowStmt = db.prepare("UPDATE borrows SET status = 'borrowed', updated_at = CURRENT_TIMESTAMP WHERE id = ?");
+    updateBorrowStmt.run(borrowId);
+
+    const updateItemStmt = db.prepare("UPDATE inventory SET quantity_available = quantity_available - ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?");
+    updateItemStmt.run(borrow.quantity, borrow.item_id);
+  });*/
 
   router.put("/:id/approve", verifyJwt, isAdmin, (req, res) => {
     const id = req.params.id; 
