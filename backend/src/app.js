@@ -10,9 +10,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-//const db  = await import('./db/db.js');
-db.pragma('foreign_keys = ON');
-
 // admin user anlegen, falls noch nicht vorhanden
 const adminUser = db.prepare("SELECT * FROM users WHERE role = ?").get('admin');
 if (!adminUser) {
