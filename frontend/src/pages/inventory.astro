@@ -7,7 +7,7 @@ import { getInventory } from "../lib/api.ts";
 const items = await getInventory();
 
 // Kategorien für Filter sammeln
-const categories: string[] = [...new Set(items.map((i: any) => i.category).filter(Boolean))];
+const categories: string[] = [...new Set<string>(items.map((i: any) => i.category).filter(Boolean))];
 ---
 
 <Layout title="Inventar">
