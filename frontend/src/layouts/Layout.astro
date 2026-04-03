@@ -1,6 +1,6 @@
 ---
 
-import '../styles/global.css' 
+import '../styles/global.css'
 
 const { title = "Fachschaft" } = Astro.props;
 
@@ -11,17 +11,45 @@ const { title = "Fachschaft" } = Astro.props;
 <head>
   <meta charset="UTF-8" />
   <title>{title}</title>
+  <script is:inline>
+    if (localStorage.getItem('theme') === 'dark' ||
+      (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    }
+  </script>
 </head>
-<body>
-  <nav>
-    <a href="/">Start</a>
-    <a href="/events">Events</a>
-    <a href="/inventory">Inventar</a>
-    <a href="/office-hours">Öffnungszeiten</a>
+<body class="bg-white dark:bg-gray-900 dark:text-white transition-colors">
+  <nav class="flex items-center gap-4 px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+    <a href="/" class="dark:text-gray-200">Start</a>
+    <a href="/events" class="dark:text-gray-200">Events</a>
+    <a href="/inventory" class="dark:text-gray-200">Inventar</a>
+    <a href="/office-hours" class="dark:text-gray-200">Öffnungszeiten</a>
+    <button
+      id="theme-toggle"
+      class="ml-auto text-xl"
+      aria-label="Dark Mode umschalten"
+    >🌙</button>
   </nav>
 
   <main>
     <slot />
   </main>
+
+  <script>
+    const btn = document.getElementById('theme-toggle')!;
+    const html = document.documentElement;
+
+    function updateIcon() {
+      btn.textContent = html.classList.contains('dark') ? '☀️' : '🌙';
+    }
+
+    updateIcon();
+
+    btn.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+      updateIcon();
+    });
+  </script>
 </body>
 </html>
