@@ -1,8 +1,16 @@
 ---
 
 import '../styles/global.css'
+import NavLink from '../components/NavLink.astro'
 
 const { title = "Fachschaft" } = Astro.props;
+
+const currentpath = (() => {
+  try {
+    if (Astro.request) return new URL(Astro.request.url).pathname;
+  } catch (e) {}
+  return '/';
+})();
 
 ---
 
@@ -18,12 +26,12 @@ const { title = "Fachschaft" } = Astro.props;
     }
   </script>
 </head>
-<body class="bg-white dark:bg-gray-900 dark:text-white transition-colors">
+<body class="transition-colors">
   <nav class="flex items-center gap-4 px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-    <a href="/" class="dark:text-gray-200">Start</a>
-    <a href="/events" class="dark:text-gray-200">Events</a>
-    <a href="/inventory" class="dark:text-gray-200">Inventar</a>
-    <a href="/office-hours" class="dark:text-gray-200">Öffnungszeiten</a>
+    <NavLink title="Start" url="" currentpath={currentpath} />
+    <NavLink title="Events" url="events" currentpath={currentpath} />
+    <NavLink title="Inventar" url="inventory" currentpath={currentpath} />
+    <NavLink title="Öffnungszeiten" url="office-hours" currentpath={currentpath} />
     <button
       id="theme-toggle"
       class="ml-auto text-xl"
