@@ -1,4 +1,5 @@
 ---
+// Generiert mit Claude Opus 4.8
 import Logo from "../layout/Logo.astro";
 import Button from "../ui/Button.astro";
 
@@ -15,16 +16,57 @@ const inputClass =
 		</p>
 	</div>
 
-	<!-- Backend folgt – aktuell ohne Funktion -->
-	<form class="flex flex-col gap-4">
+	<form id="login-form" class="flex flex-col gap-4">
 		<label class="flex flex-col gap-1.5">
 			<span class="text-sm font-medium">Benutzername</span>
-			<input type="text" name="username" autocomplete="username" class={inputClass} />
+			<input type="text" name="username" autocomplete="username" required class={inputClass} />
 		</label>
 		<label class="flex flex-col gap-1.5">
 			<span class="text-sm font-medium">Passwort</span>
-			<input type="password" name="password" autocomplete="current-password" class={inputClass} />
+			<input type="password" name="password" autocomplete="current-password" required class={inputClass} />
 		</label>
+
+		<p id="login-error" class="hidden text-sm text-red-500"></p>
+
 		<Button type="submit" class="mt-2 w-full">Einloggen</Button>
 	</form>
 </div>
+
+<script>
+	import { loginWithUsername } from "../../lib/api";
+	import { setToken, getPayload } from "../../lib/auth";
+
+	// Bereits angemeldet? Direkt ins Panel.
+	if (getPayload()) {
+		window.location.href = "/admin";
+	}
+
+	const form = document.getElementById("login-form") as HTMLFormElement;
+	const errorEl = document.getElementById("login-error") as HTMLParagraphElement;
+	const submitBtn = form.querySelector('[type="submit"]') as HTMLButtonElement;
+
+	form.addEventListener("submit", async (e) => {
+		e.preventDefault();
+		errorEl.classList.add("hidden");
+
+		const data = new FormData(form);
+		const username = String(data.get("username") ?? "").trim();
+		const password = String(data.get("password") ?? "");
+
+		submitBtn.disabled = true;
+		const originalText = submitBtn.textContent;
+		submitBtn.textContent = "Anmelden…";
+
+		try {
+			const { token } = await loginWithUsername(username, password);
+			setToken(token);
+			window.location.href = "/admin";
+		} catch (err) {
+			errorEl.textContent =
+				err instanceof Error ? err.message : "Anmeldung fehlgeschlagen.";
+			errorEl.classList.remove("hidden");
+			submitBtn.disabled = false;
+			submitBtn.textContent = originalText;
+		}
+	});
+</script>

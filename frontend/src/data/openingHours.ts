@@ -1,3 +1,4 @@
+// Generiert mit Claude Opus 4.8
 import type { OpeningDay } from "../lib/types";
 
 /** Öffnungszeiten Mo–Fr. `null` = geschlossen. Reihenfolge entspricht Mo..Fr. */

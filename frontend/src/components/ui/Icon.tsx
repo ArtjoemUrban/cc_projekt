@@ -1,3 +1,4 @@
+// Generiert mit Claude Opus 4.8
 import { icons, type IconName } from "../../lib/icons";
 
 /** Solid-Variante des Icons (für interaktive Komponenten wie die Boards). */

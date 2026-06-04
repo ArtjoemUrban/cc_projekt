@@ -1,3 +1,4 @@
+// Generiert mit Claude Opus 4.8
 import type { EventCategory, EventItem } from "../lib/types";
 
 /** Filter-Reihenfolge für die Event-Seite ("Alle" wird im Board ergänzt). */

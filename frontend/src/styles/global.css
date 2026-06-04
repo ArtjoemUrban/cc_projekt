@@ -1,3 +1,4 @@
+/* Generiert mit Claude Opus 4.8 */
 @import "tailwindcss";
 
 /* Dark Mode wird über die Klasse `.dark` am <html> gesteuert (siehe Layout.astro) */
@@ -15,9 +16,9 @@
 	--radius: 1rem;
 
 	/* Sekundärfarbe / Akzent – nur diese 4 Werte für eine neue Farbe tauschen */
-	--accent: #a3e635; /* Hauptakzent (Buttons, aktive Elemente) */
-	--accent-strong: #84cc16; /* Hover / kräftiger */
-	--accent-soft: rgba(163, 230, 53, 0.12); /* zarte Fläche (aktive Pills) */
+	--accent: #9635e6; /* Hauptakzent (Buttons, aktive Elemente) */
+	--accent-strong: #9635e6; /* Hover / kräftiger */
+	--accent-soft: rgba(171, 53, 230, 0.12); /* zarte Fläche (aktive Pills) */
 	--accent-contrast: #0b0d0a; /* Textfarbe auf Akzentflächen */
 
 	/* Flächen & Text (Light Mode) */
@@ -30,7 +31,7 @@
 }
 
 .dark {
-	--accent-soft: rgba(163, 230, 53, 0.14);
+	--accent-soft: rgba(171, 53, 230, 0.12);
 
 	--bg: #0a0b0d;
 	--surface: #15171c;

@@ -1,3 +1,4 @@
+// Generiert mit Claude Opus 4.8
 import { createSignal, onMount } from "solid-js";
 import Icon from "../ui/Icon";
 

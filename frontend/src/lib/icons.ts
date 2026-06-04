@@ -1,3 +1,4 @@
+// Generiert mit Claude Opus 4.8
 /**
  * Zentrales Icon-Register (Lucide-Style, 24x24, stroke = currentColor).
  * Neues Icon? Einfach hier den inneren SVG-Markup ergänzen – dann ist es
@@ -16,6 +17,9 @@ export const icons = {
 	search: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
 	plus: '<path d="M5 12h14M12 5v14"/>',
 	pin: '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
+	lock: '<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+	logout: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
+	trash: '<path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>',
 } as const;
 
 export type IconName = keyof typeof icons;

@@ -1,3 +1,4 @@
+// Generiert mit Claude Opus 4.8
 /** Gemeinsame Typen – werden von den Mock-Daten und später vom Backend genutzt. */
 
 export interface Member {

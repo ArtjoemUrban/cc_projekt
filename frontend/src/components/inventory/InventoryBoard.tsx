@@ -1,3 +1,4 @@
+// Generiert mit Claude Opus 4.8
 import { createMemo, createSignal, For, Show } from "solid-js";
 import Icon from "../ui/Icon";
 import FilterChips from "../ui/FilterChips";

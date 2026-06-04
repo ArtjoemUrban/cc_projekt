@@ -1,3 +1,4 @@
+// Generiert mit Claude Opus 4.8
 import { For } from "solid-js";
 
 /** Wiederverwendbare Filter-Pills (eine Auswahl aktiv). */

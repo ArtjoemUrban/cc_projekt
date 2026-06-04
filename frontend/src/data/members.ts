@@ -1,3 +1,4 @@
+// Generiert mit Claude Opus 4.8
 import type { Member } from "../lib/types";
 
 /** Platzhalter-Daten – später durch Backend-Aufruf ersetzbar. */

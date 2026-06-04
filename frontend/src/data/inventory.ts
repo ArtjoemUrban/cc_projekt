@@ -1,3 +1,4 @@
+// Generiert mit Claude Opus 4.8
 import type { InventoryItem } from "../lib/types";
 
 /** Filter-Reihenfolge für die Inventar-Seite ("Alle" wird im Board ergänzt). */

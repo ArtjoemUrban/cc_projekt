@@ -1,4 +1,5 @@
 ---
+// Generiert mit Claude Opus 4.8
 import "../styles/global.css";
 import Header from "../components/layout/Header.astro";
 import Footer from "../components/layout/Footer.astro";
@@ -9,7 +10,7 @@ interface Props {
 	chrome?: boolean;
 }
 
-const { title = "Fachschaft EI", chrome = true } = Astro.props;
+const { title = "Fachschaft E", chrome = true } = Astro.props;
 const currentPath = new URL(Astro.request.url).pathname;
 ---
 
@@ -34,4 +35,5 @@ const currentPath = new URL(Astro.request.url).pathname;
 		</main>
 		{chrome && <Footer />}
 	</body>
-</html>
+
+  </html>

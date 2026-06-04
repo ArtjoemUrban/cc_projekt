@@ -1,3 +1,4 @@
+// Generiert mit Claude Opus 4.8
 /** Hilfsfunktionen für die Anzeige. */
 
 /** ISO-Datum -> { day: "05", month: "JUN" } für die Datumskachel. */

@@ -1,3 +1,4 @@
+// Generiert mit Claude Opus 4.8
 import Icon from "../ui/Icon";
 import { dateParts, longDate } from "../../lib/format";
 import type { EventItem } from "../../lib/types";
