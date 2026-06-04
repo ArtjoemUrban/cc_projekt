@@ -1,0 +1,52 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageHeader from "../components/ui/PageHeader.astro";
+import Card from "../components/ui/Card.astro";
+import Icon from "../components/ui/Icon.astro";
+import OpeningHoursList from "../components/office/OpeningHoursList.astro";
+import { openingHours, room } from "../data/openingHours";
+
+// Heutiger Tag + einfache Auf/Zu-Anzeige (Prototyp, Build-Zeit).
+const weekday = new Date().getDay();
+const today = weekday >= 1 && weekday <= 5 ? openingHours[weekday - 1] : null;
+const open = false; // später aus aktueller Uhrzeit ableiten
+---
+
+<Layout title="Öffnungszeiten">
+	<PageHeader
+		eyebrow={room.label}
+		title="Öffnungszeiten"
+		description="Komm einfach vorbei – während der Öffnungszeiten ist immer jemand aus der Fachschaft da. Für Equipment-Rückgabe und Beratung am besten in diesen Zeiten."
+	/>
+
+	<div class="grid lg:grid-cols-2 gap-6 items-start">
+		<OpeningHoursList />
+
+		<div class="flex flex-col gap-4">
+			<!-- Aktueller Status -->
+			<Card class="p-6">
+				<p class:list={["flex items-center gap-2 font-medium", open ? "text-accent" : "text-muted"]}>
+					<span class:list={["size-2.5 rounded-full", open ? "bg-accent" : "bg-muted"]}></span>
+					{open ? "Gerade geöffnet" : "Gerade geschlossen"}
+				</p>
+				{today?.hours && <p class="text-muted font-mono text-sm mt-1">Heute {today.hours}</p>}
+			</Card>
+
+			<!-- Standort -->
+			<Card class="p-6 flex items-start gap-4">
+				<span class="grid place-items-center size-10 rounded-ui-sm bg-surface-2 border border-line text-accent shrink-0">
+					<Icon name="pin" />
+				</span>
+				<div>
+					<p class="font-semibold">{room.building}</p>
+					<p class="text-muted text-sm">{room.detail}</p>
+				</div>
+			</Card>
+
+			<p class="text-muted text-sm leading-relaxed px-1">
+				Außerhalb der Zeiten erreichst du uns jederzeit per Mail oder Instagram. In der
+				vorlesungsfreien Zeit gelten Sonderzeiten.
+			</p>
+		</div>
+	</div>
+</Layout>

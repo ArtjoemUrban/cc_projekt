@@ -1,0 +1,31 @@
+---
+/** Tab-Umschalter zwischen Datenschutz und Impressum. */
+interface Props {
+	current: "datenschutz" | "impressum";
+}
+
+const { current } = Astro.props;
+
+const tabs = [
+	{ key: "datenschutz", label: "Datenschutz", href: "/datenschutz" },
+	{ key: "impressum", label: "Impressum", href: "/impressum" },
+];
+---
+
+<div class="flex gap-2 mb-8">
+	{
+		tabs.map((tab) => (
+			<a
+				href={tab.href}
+				class:list={[
+					"px-4 py-1.5 rounded-full text-sm font-medium transition-colors",
+					tab.key === current
+						? "bg-accent text-accent-contrast"
+						: "bg-surface-2 border border-line text-muted hover:text-text",
+				]}
+			>
+				{tab.label}
+			</a>
+		))
+	}
+</div>

@@ -1,17 +1,75 @@
 @import "tailwindcss";
 
+/* Dark Mode wird über die Klasse `.dark` am <html> gesteuert (siehe Layout.astro) */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* ============================================================
+   THEME – HIER ANPASSEN
+   ------------------------------------------------------------
+   Alle Farben & die Eckenrundung kommen aus diesen Variablen.
+   Willst du die Sekundärfarbe ändern? -> nur die 4 --accent-*
+   Werte unten tauschen. Willst du rundere Ecken? -> --radius.
+   ============================================================ */
 :root {
+	/* Eckenrundung (eine Zahl steuert alles, Rest wird abgeleitet) */
+	--radius: 1rem;
+
+	/* Sekundärfarbe / Akzent – nur diese 4 Werte für eine neue Farbe tauschen */
+	--accent: #a3e635; /* Hauptakzent (Buttons, aktive Elemente) */
+	--accent-strong: #84cc16; /* Hover / kräftiger */
+	--accent-soft: rgba(163, 230, 53, 0.12); /* zarte Fläche (aktive Pills) */
+	--accent-contrast: #0b0d0a; /* Textfarbe auf Akzentflächen */
+
+	/* Flächen & Text (Light Mode) */
 	--bg: #ffffff;
-	--text: #16171d; /* gray-900 */
-	--nav-border: #e5e7eb; /* gray-200 */
+	--surface: #ffffff;
+	--surface-2: #f3f4f6;
+	--line: #e5e7eb;
+	--text: #16171d;
+	--muted: #6b7280;
 }
 
 .dark {
-	--bg: #16171d; /* gray-900 */
-	--text: #ffffff;
-	--nav-border: #374151; /* gray-700 */
+	--accent-soft: rgba(163, 230, 53, 0.14);
+
+	--bg: #0a0b0d;
+	--surface: #15171c;
+	--surface-2: #1c1f26;
+	--line: #2a2d35;
+	--text: #f4f5f7;
+	--muted: #9aa0aa;
+}
+
+/* ============================================================
+   Tokens an Tailwind weitergeben.
+   `inline` sorgt dafür, dass die Utilities die CSS-Variablen
+   referenzieren -> Theme-Wechsel zur Laufzeit funktioniert.
+   Erzeugt u.a.: bg-bg, bg-surface, text-muted, text-accent,
+   border-line, rounded-ui, rounded-ui-lg, font-display, ...
+   ============================================================ */
+@theme inline {
+	--color-bg: var(--bg);
+	--color-surface: var(--surface);
+	--color-surface-2: var(--surface-2);
+	--color-line: var(--line);
+	--color-text: var(--text);
+	--color-muted: var(--muted);
+
+	--color-accent: var(--accent);
+	--color-accent-strong: var(--accent-strong);
+	--color-accent-soft: var(--accent-soft);
+	--color-accent-contrast: var(--accent-contrast);
+
+	--radius-ui-sm: calc(var(--radius) * 0.6);
+	--radius-ui: var(--radius);
+	--radius-ui-lg: calc(var(--radius) * 1.4);
+
+	--font-display: Georgia, "Iowan Old Style", "Palatino Linotype", "Times New Roman", serif;
+	--font-mono: "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+html {
+	scroll-behavior: smooth;
 }
 
 body {

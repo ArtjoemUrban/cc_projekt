@@ -1,0 +1,18 @@
+---
+/** Einheitlicher Seitenkopf: kleines Label + großer Titel + Beschreibung. */
+interface Props {
+	eyebrow?: string;
+	title: string;
+	description?: string;
+}
+
+const { eyebrow, title, description } = Astro.props;
+---
+
+<header class="mb-10 max-w-3xl">
+	{eyebrow && (
+		<p class="font-mono text-xs tracking-[0.25em] uppercase text-muted mb-3">{eyebrow}</p>
+	)}
+	<h1 class="font-display text-4xl sm:text-5xl font-bold mb-4">{title}</h1>
+	{description && <p class="text-muted text-lg leading-relaxed">{description}</p>}
+</header>

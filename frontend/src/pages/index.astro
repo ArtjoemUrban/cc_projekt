@@ -1,10 +1,20 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Card from "../components/ui/Card.astro";
+import Hero from "../components/home/Hero.astro";
+import RoomStatusCard from "../components/home/RoomStatusCard.astro";
 ---
 
-<Layout title="Fachschaft">
-  <h1>Willkommen bei der Fachschaft</h1>
-  <p>Infos über uns…</p>
-</div>
+<Layout title="Fachschaft EI">
+	<div class="grid lg:grid-cols-2 gap-6">
+		<Hero />
 
+		<div class="flex flex-col gap-6">
+			<!-- Platz für ein Foto / eine Grafik -->
+			<Card class="flex-1 min-h-64 grid place-items-center text-muted font-mono text-sm">
+				Bild folgt
+			</Card>
+			<RoomStatusCard open={true} hours="11:00 – 13:00 Uhr" />
+		</div>
+	</div>
 </Layout>

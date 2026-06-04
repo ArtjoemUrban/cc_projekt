@@ -1,0 +1,38 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageHeader from "../components/ui/PageHeader.astro";
+import LegalTabs from "../components/legal/LegalTabs.astro";
+---
+
+<Layout title="Impressum">
+	<PageHeader eyebrow="Rechtliches" title="Impressum" />
+	<LegalTabs current="impressum" />
+
+	<article class="max-w-3xl flex flex-col gap-8">
+		<p class="font-mono text-sm text-muted">Angaben gemäß § 5 TMG</p>
+
+		<section>
+			<h2 class="text-xl font-semibold mb-2">Herausgeber</h2>
+			<p class="text-muted leading-relaxed">
+				Fachschaft Informatik &amp; Elektrotechnik<br />
+				Hochschule Ravensburg-Weingarten (RWU)<br />
+				Doggenriedstraße, 88250 Weingarten
+			</p>
+		</section>
+
+		<section>
+			<h2 class="text-xl font-semibold mb-2">Kontakt</h2>
+			<p class="text-muted leading-relaxed font-mono">
+				vorsitz@fs-ei.rwu.de
+			</p>
+		</section>
+
+		<section>
+			<h2 class="text-xl font-semibold mb-2">Haftungshinweis</h2>
+			<p class="text-muted leading-relaxed">
+				Diese Website ist ein studentischer Prototyp. Für die Inhalte externer Links übernehmen wir
+				keine Haftung; für deren Inhalt sind ausschließlich die jeweiligen Betreiber verantwortlich.
+			</p>
+		</section>
+	</article>
+</Layout>

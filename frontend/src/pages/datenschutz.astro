@@ -1,0 +1,39 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageHeader from "../components/ui/PageHeader.astro";
+import LegalTabs from "../components/legal/LegalTabs.astro";
+---
+
+<Layout title="Datenschutz">
+	<PageHeader eyebrow="Rechtliches" title="Datenschutz" />
+	<LegalTabs current="datenschutz" />
+
+	<article class="max-w-3xl flex flex-col gap-8">
+		<p class="font-mono text-sm text-muted">Datenschutzerklärung nach DSGVO</p>
+
+		<section>
+			<h2 class="text-xl font-semibold mb-2">1. Verantwortliche Stelle</h2>
+			<p class="text-muted leading-relaxed">
+				Verantwortlich für die Datenverarbeitung auf dieser Website ist die Fachschaft Informatik &amp;
+				Elektrotechnik der RWU. Die Kontaktdaten findest du im Impressum.
+			</p>
+		</section>
+
+		<section>
+			<h2 class="text-xl font-semibold mb-2">2. Erhebung und Speicherung</h2>
+			<p class="text-muted leading-relaxed">
+				Diese Website ist ein Prototyp. Es werden keine personenbezogenen Daten an einen Server
+				übertragen. Eingaben (z. B. im Admin-Bereich) werden ausschließlich lokal in deinem Browser
+				(localStorage) gespeichert und verlassen dein Gerät nicht.
+			</p>
+		</section>
+
+		<section>
+			<h2 class="text-xl font-semibold mb-2">3. Deine Rechte</h2>
+			<p class="text-muted leading-relaxed">
+				Du hast jederzeit das Recht auf Auskunft, Berichtigung und Löschung deiner Daten. Wende dich
+				dafür an die im Impressum genannte Kontaktadresse.
+			</p>
+		</section>
+	</article>
+</Layout>

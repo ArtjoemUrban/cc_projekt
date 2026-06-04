@@ -1,0 +1,29 @@
+---
+/** Button oder Link (wenn `href` gesetzt ist). */
+interface Props {
+	href?: string;
+	type?: "button" | "submit";
+	variant?: "primary" | "outline" | "ghost";
+	class?: string;
+}
+
+const { href, type = "button", variant = "primary", class: cls } = Astro.props;
+
+const variants: Record<string, string> = {
+	primary: "bg-accent text-accent-contrast hover:bg-accent-strong",
+	outline: "border border-line text-text hover:bg-surface-2",
+	ghost: "text-muted hover:text-text hover:bg-surface-2",
+};
+
+const base =
+	"inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-ui font-medium transition-colors cursor-pointer";
+const Tag = href ? "a" : "button";
+---
+
+<Tag
+	href={href}
+	type={href ? undefined : type}
+	class:list={[base, variants[variant], cls]}
+>
+	<slot />
+</Tag>

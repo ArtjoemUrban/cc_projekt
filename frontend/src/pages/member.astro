@@ -1,112 +1,18 @@
 ---
 import Layout from "../layouts/Layout.astro";
-
-const members = [
-	{
-		id: 1,
-		name: 'Anna Müller',
-		role: 'Projektleiterin',
-		img: '/assets/members/anna.jpg',
-		bio: 'Anna koordiniert Projekte und sorgt für reibungslose Abläufe.'
-	},
-	{
-		id: 2,
-		name: 'Ben Schmidt',
-		role: 'Entwickler',
-		img: '/assets/members/ben.jpg',
-		bio: 'Ben entwickelt Frontend- und Backend-Lösungen.'
-	},
-	{
-		id: 3,
-		name: 'Clara Fischer',
-		role: 'Community Managerin',
-		img: '/assets/members/clara.jpg',
-		bio: 'Clara pflegt den Kontakt zu Mitgliedern und Partnern.'
-	}
-]
+import PageHeader from "../components/ui/PageHeader.astro";
+import MemberCard from "../components/members/MemberCard.astro";
+import { members } from "../data/members";
 ---
 
 <Layout title="Mitglieder">
-	<div class="container">
-		<h1>Unsere Mitglieder</h1>
+	<PageHeader
+		eyebrow="Das Team"
+		title="Mitglieder"
+		description="Diese Menschen halten die Fachschaft am Laufen – von Hochschulpolitik über Events bis zum Equipment-Verleih. Schreib uns einfach, wenn du Fragen hast oder mitmachen willst."
+	/>
 
-		<div class="grid">
-			{members.map((member) => (
-				<article class="card">
-					<img src={member.img} alt={`Porträt von ${member.name}`} />
-					<div class="card-body">
-						<div class="name">{member.name}</div>
-						<div class="role">{member.role}</div>
-						<div class="bio">{member.bio}</div>
-					</div>
-				</article>
-			))}
-		</div>
+	<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+		{members.map((member) => <MemberCard member={member} />)}
 	</div>
-
-	<style>
-		:global(body) {
-			margin: 0;
-		}
-
-		.container {
-			max-width: 1000px;
-			margin: 0 auto;
-			padding: 2rem;
-		}
-
-		h1 {
-			text-align: center;
-			margin-bottom: 1rem;
-		}
-
-		.grid {
-			display: grid;
-			grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-			gap: 1rem;
-		}
-
-		.card {
-			background: #fff;
-			border-radius: 10px;
-			box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
-			overflow: hidden;
-			display: flex;
-			flex-direction: column;
-		}
-
-		.card img {
-			width: 100%;
-			height: 200px;
-			object-fit: cover;
-			background: #e6eef8;
-		}
-
-		.card-body {
-			padding: 1rem;
-			display: flex;
-			flex-direction: column;
-			gap: 0.5rem;
-		}
-
-		.name {
-			font-weight: 700;
-		}
-
-		.role {
-			font-size: 0.9rem;
-			color: #475569;
-		}
-
-		.bio {
-			font-size: 0.9rem;
-			color: #334155;
-		}
-
-		@media (max-width: 420px) {
-			.card img {
-				height: 140px;
-			}
-		}
-	</style>
 </Layout>

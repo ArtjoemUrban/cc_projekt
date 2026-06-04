@@ -1,0 +1,41 @@
+---
+import Card from "../ui/Card.astro";
+import Badge from "../ui/Badge.astro";
+import { openingHours } from "../../data/openingHours";
+
+// Wochentag 1=Mo .. 5=Fr -> Index in openingHours (0..4). Sa/So => -1 (kein Highlight).
+const weekday = new Date().getDay();
+const todayIndex = weekday >= 1 && weekday <= 5 ? weekday - 1 : -1;
+---
+
+<Card class="p-2 sm:p-3">
+	<ul>
+		{
+			openingHours.map((day, i) => {
+				const isToday = i === todayIndex;
+				const closed = day.hours === null;
+				return (
+					<li
+						class:list={[
+							"flex items-center justify-between gap-3 px-4 py-4 rounded-ui",
+							isToday && "bg-accent-soft",
+						]}
+					>
+						<span class="flex items-center gap-3">
+							{isToday && <Badge variant="solid">Heute</Badge>}
+							<span class:list={["font-medium", isToday && "text-accent"]}>{day.name}</span>
+						</span>
+						<span
+							class:list={[
+								"font-mono text-sm",
+								closed ? "text-muted" : isToday ? "text-accent" : "text-muted",
+							]}
+						>
+							{closed ? "geschlossen" : day.hours}
+						</span>
+					</li>
+				);
+			})
+		}
+	</ul>
+</Card>

@@ -1,0 +1,12 @@
+---
+/** Generische Fläche mit Rahmen + Rundung aus dem Theme. */
+interface Props {
+	class?: string;
+}
+
+const { class: cls } = Astro.props;
+---
+
+<div class:list={["bg-surface border border-line rounded-ui-lg", cls]}>
+	<slot />
+</div>

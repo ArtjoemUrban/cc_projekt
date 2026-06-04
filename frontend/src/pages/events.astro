@@ -1,15 +1,16 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { getEvents } from "../lib/api.ts";
-
-const events = await getEvents();
+import PageHeader from "../components/ui/PageHeader.astro";
+import EventsBoard from "../components/events/EventsBoard.tsx";
+import { events, eventCategories } from "../data/events";
 ---
 
 <Layout title="Events">
-  <h1>Events</h1>
-  <ul>
-    {events.map(e => (
-      <li>{e.title} – {e.date}</li>
-    ))}
-  </ul>
+	<PageHeader
+		eyebrow="Kalender"
+		title="Events"
+		description="Partys, Vorträge, Workshops und Spieleabende – melde dich direkt an. Die Plätze sind begrenzt, also sei schnell."
+	/>
+
+	<EventsBoard events={events} categories={eventCategories} client:load />
 </Layout>

@@ -1,0 +1,26 @@
+---
+/** Kleines Pill-Label (Mono-Schrift). Varianten siehe unten. */
+interface Props {
+	variant?: "accent" | "soft" | "muted" | "solid";
+	class?: string;
+}
+
+const { variant = "muted", class: cls } = Astro.props;
+
+const variants: Record<string, string> = {
+	accent: "border border-accent/50 text-accent",
+	soft: "bg-accent-soft text-accent",
+	muted: "bg-surface-2 border border-line text-muted",
+	solid: "bg-accent text-accent-contrast",
+};
+---
+
+<span
+	class:list={[
+		"inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono",
+		variants[variant],
+		cls,
+	]}
+>
+	<slot />
+</span>

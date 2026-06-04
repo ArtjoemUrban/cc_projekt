@@ -1,0 +1,29 @@
+---
+import Card from "../ui/Card.astro";
+import Icon from "../ui/Icon.astro";
+import type { Member } from "../../lib/types";
+
+interface Props {
+	member: Member;
+}
+
+const { member } = Astro.props;
+---
+
+<Card class="p-6 flex flex-col items-center text-center gap-3">
+	<div class="size-20 rounded-full bg-surface-2 border border-line grid place-items-center font-mono text-xs text-muted">
+		Foto
+	</div>
+	<div>
+		<h3 class="font-semibold text-lg">{member.role}</h3>
+		<p class="font-mono text-sm text-accent">{member.title}</p>
+	</div>
+	<p class="text-muted text-sm">{member.program}</p>
+	<a
+		href={`mailto:${member.email}`}
+		class="inline-flex items-center gap-2 font-mono text-sm text-muted hover:text-accent transition-colors"
+	>
+		<Icon name="mail" size={14} />
+		{member.email}
+	</a>
+</Card>

@@ -1,0 +1,19 @@
+---
+import Card from "../ui/Card.astro";
+
+interface Props {
+	open?: boolean;
+	hours?: string;
+}
+
+const { open = true, hours = "11:00 – 13:00 Uhr" } = Astro.props;
+---
+
+<Card class="p-6">
+	<p class="font-mono text-xs tracking-[0.2em] uppercase text-muted">FS-Raum gerade</p>
+	<p class:list={["mt-3 flex items-center gap-2 font-medium", open ? "text-accent" : "text-muted"]}>
+		<span class:list={["size-2.5 rounded-full", open ? "bg-accent" : "bg-muted"]}></span>
+		{open ? "Heute geöffnet" : "Gerade geschlossen"}
+	</p>
+	<p class="text-muted font-mono text-sm mt-1">{hours}</p>
+</Card>
