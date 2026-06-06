@@ -6,13 +6,13 @@ import type { IconName } from "../../lib/icons";
 interface Props {
 	label: string;
 	href: string;
-	icon: IconName;
+	icon?: IconName;
 	currentPath: string;
 }
 
-const { label, href, icon, currentPath } = Astro.props;
+const { label, href, currentPath } = Astro.props;
 
-const normalize = (p: string) => (p.length > 1 ? p.replace(/\/$/, "") : p);
+const normalize = (p: string) => (p?.length > 1 ? p.replace(/\/$/, "") : p || "/");
 const active = normalize(currentPath) === normalize(href);
 ---
 
@@ -23,6 +23,6 @@ const active = normalize(currentPath) === normalize(href);
 		active ? "bg-accent-soft text-accent" : "text-muted hover:text-text hover:bg-surface-2",
 	]}
 >
-	<Icon name={icon} size={16} />
+	{/* <Icon name={icon} size={16} /> */}
 	<span>{label}</span>
 </a>

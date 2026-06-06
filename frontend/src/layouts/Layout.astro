@@ -1,39 +1,65 @@
 ---
-// Generiert mit Claude Opus 4.8
-import "../styles/global.css";
-import Header from "../components/layout/Header.astro";
-import Footer from "../components/layout/Footer.astro";
 
-interface Props {
-	title?: string;
-	/** Header/Footer ausblenden (z. B. für Fokus-Seiten). */
-	chrome?: boolean;
-}
+import '../styles/global.css'
+import NavLink from '../components/layout/NavLink.astro'
+import type { IconName } from '../lib/icons';
 
-const { title = "Fachschaft E", chrome = true } = Astro.props;
-const currentPath = new URL(Astro.request.url).pathname;
+const { title = "Fachschaft" } = Astro.props;
+
+const currentpath = (() => {
+  try {
+    if (Astro.request) return new URL(Astro.request.url).pathname;
+  } catch (e) {}
+  return '/';
+})();
+
 ---
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="de">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<title>{title}</title>
-		<!-- Dark Mode ist Standard; nur bei expliziter Wahl "light" abschalten -->
-		<script is:inline>
-			if (localStorage.getItem("theme") !== "light") {
-				document.documentElement.classList.add("dark");
-			}
-		</script>
-	</head>
-	<body class="min-h-screen flex flex-col bg-bg text-text antialiased">
-		{chrome && <Header currentPath={currentPath} />}
-		<main class="flex-1 w-full mx-auto max-w-6xl px-4 py-10">
-			<slot />
-		</main>
-		{chrome && <Footer />}
-	</body>
+<head>
+  <meta charset="UTF-8" />
+  <title>{title}</title>
+  <script is:inline>
+    if (localStorage.getItem('theme') === 'dark' ||
+      (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    }
+  </script>
+</head>
+<body class="transition-colors">
+  <nav class="flex items-center gap-4 px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+    <NavLink label="Start" href="/" icon="home" currentPath={currentpath} />
+    <NavLink label="Mitglieder" href="/member" icon="users" currentPath={currentpath} />
+    <NavLink label="Events" href="/events" icon="calendar" currentPath={currentpath} />
+    <NavLink label="Inventar" href="/inventory" icon="box" currentPath={currentpath} />
+    <NavLink label="Öffnungszeiten" href="/office-hours" icon="clock" currentPath={currentpath} />
+    <button
+      id="theme-toggle"
+      class="ml-auto text-xl"
+      aria-label="Dark Mode umschalten"
+    >🌙</button>
+  </nav>
 
-  </html>
+  <main>
+    <slot />
+  </main>
+
+  <script>
+    const btn = document.getElementById('theme-toggle')!;
+    const html = document.documentElement;
+
+    function updateIcon() {
+      btn.textContent = html.classList.contains('dark') ? '☀️' : '🌙';
+    }
+
+    updateIcon();
+
+    btn.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+      updateIcon();
+    });
+  </script>
+</body>
+</html>
