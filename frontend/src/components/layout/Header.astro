@@ -22,7 +22,7 @@ const links: { label: string; href: string; icon: IconName }[] = [
 ---
 
 <header class="sticky top-0 z-30 bg-bg/80 backdrop-blur border-b border-line">
-	<div class="mx-auto max-w-6xl px-4 h-16 flex items-center gap-6">
+	<div class="px-4 md:px-8 h-16 flex items-center gap-6">
 		<Brand />
 		<nav class="hidden md:flex items-center gap-1">
 			{links.map((link) => <NavLink {...link} currentPath={currentPath} />)}
