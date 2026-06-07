@@ -5,6 +5,7 @@ import Card from "../components/ui/Card.astro";
 import Hero from "../components/home/Hero.astro";
 import Courses from "../components/home/Courses.astro";
 import RoomStatusCard from "../components/home/RoomStatusCard.astro";
+import gruppenbild from "../assets/FSE_Guppenbild.jpeg";
 ---
 
 <Layout title="Fachschaft E ">
@@ -15,7 +16,7 @@ import RoomStatusCard from "../components/home/RoomStatusCard.astro";
 		<div class="flex flex-col gap-6">
 			<!-- Platz für ein Foto / eine Grafik -->
 			<Card class="flex-1 min-h-64 grid place-items-center text-muted font-mono text-sm">
-				<img src="/FSE_Gruppenbild.jpg" alt="Fachschaftsgruppenbild" class="w-full h-full object-cover" />
+				<img src={gruppenbild.src} alt="Fachschaftsgruppenbild" class="w-full h-full object-cover" />
 			</Card>
 			<RoomStatusCard open={true} hours="11:00 – 13:00 Uhr" />
 		</div>
