@@ -77,8 +77,8 @@ function dbinit(db) {
 // -- 0 = Sonntag, 6 = Samstag
     db.exec(`CREATE TABLE IF NOT EXISTS opening_hours (
         weekday INTEGER PRIMARY KEY CHECK (weekday BETWEEN 0 AND 6), 
-        open_time TEXT NOT NULL,
-        close_time TEXT NOT NULL,
+        open_time TEXT,
+        close_time TEXT,
         updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
         updated_by INTEGER,
         FOREIGN KEY (updated_by) REFERENCES users(id),

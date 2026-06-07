@@ -137,6 +137,13 @@ export async function deleteInventoryItem(id: number) {
 /* ----------------------- Öffnungszeiten (Admin) ----------------------- */
 
 export async function updateOpeningHours(weekday: number, open_time: string, close_time: string) {
+	if (open_time === close_time) {
+		return request(`/opening-hours/${weekday}`, {
+			method: "PUT",
+			body: { open_time: null, close_time: null },
+			auth: true,
+		});
+	}
 	return request(`/opening-hours/${weekday}`, {
 		method: "PUT",
 		body: { open_time, close_time },
