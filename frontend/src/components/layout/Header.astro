@@ -17,16 +17,18 @@ const links: { label: string; href: string; icon: IconName }[] = [
 	{ label: "Events", href: "/events", icon: "calendar" },
 	{ label: "Inventar", href: "/inventory", icon: "box" },
 	{ label: "Öffnungszeiten", href: "/office-hours", icon: "clock" },
-	{ label: "Anmelden", href: "/login", icon: "lock" },
+	//{ label: "Anmelden", href: "/login", icon: "lock" },
 ];
 ---
 
 <header class="sticky top-0 z-30 bg-bg/80 backdrop-blur border-b border-line">
-	<div class="mx-auto max-w-6xl px-4 h-16 flex items-center gap-4">
+	<div class="mx-auto max-w-6xl px-4 h-16 flex items-center gap-6">
 		<Brand />
-		<nav class="ml-auto hidden md:flex items-center gap-1">
+		<nav class="hidden md:flex items-center gap-1">
 			{links.map((link) => <NavLink {...link} currentPath={currentPath} />)}
 		</nav>
-		<ThemeToggle client:load />
+		<div class="ml-auto">
+			<ThemeToggle client:load />
+		</div>
 	</div>
 </header>

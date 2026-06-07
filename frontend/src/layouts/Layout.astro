@@ -2,8 +2,8 @@
 
 import '../styles/global.css'
 import NavLink from '../components/layout/NavLink.astro'
+import Header from '../components/layout/Header.astro'
 import Footer from '../components/layout/Footer.astro'
-import type { IconName } from '../lib/icons';
 
 const { title = "Fachschaft" } = Astro.props;
 
@@ -29,39 +29,10 @@ const currentpath = (() => {
   </script>
 </head>
 <body class="transition-colors">
-  <nav class="flex items-center gap-4 px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-    <NavLink label="Start" href="/" icon="home" currentPath={currentpath} />
-    <NavLink label="Mitglieder" href="/member" icon="users" currentPath={currentpath} />
-    <NavLink label="Events" href="/events" icon="calendar" currentPath={currentpath} />
-    <NavLink label="Inventar" href="/inventory" icon="box" currentPath={currentpath} />
-    <NavLink label="Öffnungszeiten" href="/office-hours" icon="clock" currentPath={currentpath} />
-    <button
-      id="theme-toggle"
-      class="ml-auto text-xl"
-      aria-label="Dark Mode umschalten"
-    >🌙</button>
-  </nav>
-
+  <Header currentPath={currentpath} />
   <main class="px-4 py-6 md:px-8 md:py-8">
     <slot />
   </main>
-
-  <script>
-    const btn = document.getElementById('theme-toggle')!;
-    const html = document.documentElement;
-
-    function updateIcon() {
-      btn.textContent = html.classList.contains('dark') ? '☀️' : '🌙';
-    }
-
-    updateIcon();
-
-    btn.addEventListener('click', () => {
-      html.classList.toggle('dark');
-      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
-      updateIcon();
-    });
-  </script>
   <Footer />
 </body>
 

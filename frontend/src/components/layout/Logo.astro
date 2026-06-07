@@ -1,6 +1,6 @@
 ---
 // Generiert mit Claude Opus 4.8
-import Icon from "../ui/Icon.astro";
+import FSELogo from "../../assets/FSE_Logo_SVG.svg";
 
 interface Props {
 	size?: number;
@@ -9,9 +9,9 @@ interface Props {
 const { size = 40 } = Astro.props;
 ---
 
-<span
-	class="grid place-items-center rounded-ui-sm bg-surface-2 border border-line text-text shrink-0"
+<img
+	src={FSELogo.src}
+	alt="Fachschaft E Logo"
+	class="shrink-0"
 	style={`width:${size}px;height:${size}px`}
->
-	<Icon name="logo" size={Math.round(size * 0.5)} />
-</span>
+/>
