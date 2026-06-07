@@ -15,8 +15,8 @@ import gruppenbild from "../assets/FSE_Guppenbild.jpeg";
 
 		<div class="flex flex-col gap-6">
 			<!-- Platz für ein Foto / eine Grafik -->
-			<Card class="flex-1 min-h-64 grid place-items-center text-muted font-mono text-sm">
-				<img src={gruppenbild.src} alt="Fachschaftsgruppenbild" class="w-full h-full object-cover" />
+			<Card class="flex-1 min-h-64 grid place-items-center text-muted font-mono text-sm overflow-hidden">
+				<img src={gruppenbild.src} alt="Fachschaftsgruppenbild" class="w-full h-full object-cover rounded-ui-lg" />
 			</Card>
 			<RoomStatusCard open={true} hours="11:00 – 13:00 Uhr" />
 		</div>
