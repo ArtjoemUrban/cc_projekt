@@ -1,0 +1,28 @@
+---
+import Card from "../ui/Card.astro";
+import { allPrograms } from "../../data/studiengaenge_e";
+---
+
+<Card class="p-6 flex flex-col gap-4">
+	<div>
+		<h2 id="courses-title" class="text-xl font-bold mb-2">Studiengänge</h2>
+		<p class="text-muted text-sm">Das sind unsere Studiengänge.</p>
+	</div>
+
+	<ul class="space-y-3 max-h-96 overflow-y-auto pr-2">
+		{allPrograms.map((program) => (
+			<li>
+				<a 
+					href={program.url} 
+					target="_blank" 
+					rel="noreferrer"
+					class="flex justify-between gap-4 p-3 rounded-lg text-sm no-underline transition-colors hover:bg-accent/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+				>
+					<span class="font-bold min-w-[3rem] flex-shrink-0">{program.code}</span>
+					<span class="flex-1">{program.name}</span>
+					<span class="text-muted whitespace-nowrap flex-shrink-0">{program.level}</span>
+				</a>
+			</li>
+		))}
+	</ul>
+</Card>

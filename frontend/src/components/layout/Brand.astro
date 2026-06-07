@@ -1,5 +1,7 @@
 ---
 // Generiert mit Claude Opus 4.8
+// Komponente für die Markenpräsentation in der Kopfzeile
+
 import Logo from "./Logo.astro";
 
 interface Props {
@@ -12,9 +14,9 @@ const { href = "/" } = Astro.props;
 <a href={href} class="flex items-center gap-3">
 	<Logo />
 	<span class="leading-tight">
-		<span class="block font-semibold">Fachschaft EI</span>
+		<span class="block font-semibold">Fachschaft E</span>
 		<span class="block text-[10px] tracking-[0.2em] uppercase text-muted font-mono">
-			Informatik · Elektrotechnik
+			 Elektrotechnik · Informatik
 		</span>
 	</span>
 </a>

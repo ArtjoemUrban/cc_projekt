@@ -3,11 +3,12 @@
 import Card from "../ui/Card.astro";
 import Badge from "../ui/Badge.astro";
 import Button from "../ui/Button.astro";
+import Courses from "./Courses.astro";
 ---
 
 <Card class="p-8 lg:p-10 flex flex-col gap-6">
 	<div class="flex flex-wrap gap-2">
-		<Badge variant="accent">Fachschaft EI · RWU</Badge>
+		<Badge variant="accent">Fachschaft E · RWU</Badge>
 		<Badge variant="muted">Informatik &amp; Elektrotechnik</Badge>
 	</div>
 
@@ -23,5 +24,8 @@ import Button from "../ui/Button.astro";
 	<div class="flex flex-wrap gap-3">
 		<Button href="/member">Lern uns kennen</Button>
 		<Button href="/events" variant="outline">Zu den Events</Button>
+	</div>
+	<div class="mt-6">
+		<Courses />
 	</div>
 </Card>
