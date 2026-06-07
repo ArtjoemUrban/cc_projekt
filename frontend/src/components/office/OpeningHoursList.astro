@@ -3,7 +3,7 @@ import Card from "../ui/Card.astro";
 import Badge from "../ui/Badge.astro";
 import { getOpeningHours } from "../../lib/api/openingHours";
 
-let openingHours;
+let openingHours: Awaited<ReturnType<typeof getOpeningHours>> = [];
 let error = null;
 
 try {
