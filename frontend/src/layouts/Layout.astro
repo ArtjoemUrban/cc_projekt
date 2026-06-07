@@ -1,7 +1,6 @@
 ---
 
 import '../styles/global.css'
-import NavLink from '../components/layout/NavLink.astro'
 import Header from '../components/layout/Header.astro'
 import Footer from '../components/layout/Footer.astro'
 
@@ -20,6 +19,8 @@ const currentpath = (() => {
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
+  <link rel="icon" href="/fse-logo-favicon.svg" type="image/svg+xml" />
+  <meta name="theme-color" content="#9635e6" />
   <title>{title}</title>
   <script is:inline>
     if (localStorage.getItem('theme') === 'dark' ||
