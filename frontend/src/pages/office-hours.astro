@@ -5,12 +5,38 @@ import PageHeader from "../components/ui/PageHeader.astro";
 import Card from "../components/ui/Card.astro";
 import Icon from "../components/ui/Icon.astro";
 import OpeningHoursList from "../components/office/OpeningHoursList.astro";
-import { openingHours, room } from "../data/openingHours";
+import { getOpeningHours } from "../lib/api/openingHours";
+import { room } from "../data/openingHours";
 
-// Heutiger Tag + einfache Auf/Zu-Anzeige (Prototyp, Build-Zeit).
-const weekday = new Date().getDay();
-const today = weekday >= 1 && weekday <= 5 ? openingHours[weekday - 1] : null;
-const open = false; // später aus aktueller Uhrzeit ableiten
+// Hole echte Öffnungszeiten vom Backend
+let openingHoursData: any[] = [];
+let today: any = null;
+let open = false;
+
+try {
+	openingHoursData = await getOpeningHours();
+	
+	// Aktueller Wochentag
+	const now = new Date();
+	const currentWeekday = now.getDay(); // 0=So, 1=Mo, ..., 6=Sa
+	
+	// Finde heute's Öffnungszeiten
+	today = openingHoursData.find((day) => day.weekday === currentWeekday);
+	
+	// Prüfe ob gerade offen
+	if (today && today.open_time && today.close_time) {
+		const [openHour, openMin] = today.open_time.split(":").map(Number);
+		const [closeHour, closeMin] = today.close_time.split(":").map(Number);
+		
+		const currentTime = now.getHours() * 60 + now.getMinutes();
+		const openTime = openHour * 60 + openMin;
+		const closeTime = closeHour * 60 + closeMin;
+		
+		open = currentTime >= openTime && currentTime < closeTime;
+	}
+} catch (error) {
+	console.error("Failed to fetch opening hours:", error);
+}
 ---
 
 <Layout title="Öffnungszeiten">
@@ -31,6 +57,7 @@ const open = false; // später aus aktueller Uhrzeit ableiten
 					{open ? "Gerade geöffnet" : "Gerade geschlossen"}
 				</p>
 				{today?.hours && <p class="text-muted font-mono text-sm mt-1">Heute {today.hours}</p>}
+				{!today?.hours && <p class="text-muted font-mono text-sm mt-1">Heute geschlossen</p>}
 			</Card>
 
 			<!-- Standort -->

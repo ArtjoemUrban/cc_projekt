@@ -79,8 +79,8 @@ CREATE TABLE IF NOT EXISTS events (
 CREATE TABLE IF NOT EXISTS opening_hours (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   weekday INTEGER NOT NULL, -- 0 = Montag ... 6 = Sonntag
-  open_time TEXT NOT NULL,
-  close_time TEXT NOT NULL,
+  open_time TEXT,
+  close_time TEXT,
   updated_by INTEGER,
   FOREIGN KEY (updated_by) REFERENCES users(id)
 );

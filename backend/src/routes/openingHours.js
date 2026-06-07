@@ -54,6 +54,7 @@ export default function openingHoursRoutes(db) {
 
 
   router.put("/:day_of_week", verifyJwt, isAdmin, (req, res) => {
+    console.log(`Received request to update opening hours for day_of_week: ${req.params.day_of_week} by user: ${req.user.username}`);
     const day_of_week = req.params.day_of_week;
     if (![1, 2, 3, 4, 5, 6, 0].includes(parseInt(day_of_week))) {
       return res.status(400).json({ message: "Invalid day_of_week. Must be 0 (Sunday) to 6 (Saturday)." });

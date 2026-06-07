@@ -39,3 +39,23 @@ export async function getOpeningHours(): Promise<(OpeningHour & { name: string; 
 			hours: day.open_time && day.close_time ? `${day.open_time} - ${day.close_time}` : null,
 		}));
 }
+
+export async function updateOpeningHours(
+	day_of_week: number,
+	open_time: string | null,
+	close_time: string | null,
+	token: string
+): Promise<void> {
+	const response = await fetch(`${API_URL}/opening-hours/${day_of_week}`, {
+		method: "PUT",
+		headers: {
+			"Content-Type": "application/json",
+			Authorization: `Bearer ${token}`,
+		},
+		body: JSON.stringify({ open_time, close_time }),
+	});
+
+	if (!response.ok) {
+		throw new Error("Failed to update opening hours");
+	}
+}
