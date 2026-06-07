@@ -1,6 +1,7 @@
 ---
 // Generiert mit Claude Opus 4.8
-import FSELogo from "../../assets/FSE_Logo_SVG.svg";
+import FSELogoDark from "../../assets/FSE_Logo_SVG.svg";
+import FSELogoLight from "../../assets/FSE_Logo_SVG_Black.svg";
 
 interface Props {
 	size?: number;
@@ -9,9 +10,45 @@ interface Props {
 const { size = 40 } = Astro.props;
 ---
 
-<img
-	src={FSELogo.src}
-	alt="Fachschaft E Logo"
-	class="shrink-0"
-	style={`width:${size}px;height:${size}px`}
-/>
+<div class="shrink-0 logo-container" style={`--logo-size: ${size}px`}>
+	<img
+		src={FSELogoLight.src}
+		alt="Fachschaft EI Logo"
+		class="logo-light"
+	/>
+	<img
+		src={FSELogoDark.src}
+		alt="Fachschaft EI Logo"
+		class="logo-dark"
+	/>
+</div>
+
+<style define:vars={{ logoSize: `${size}px` }}>
+	.logo-container {
+		width: var(--logo-size);
+		height: var(--logo-size);
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.logo-light {
+		width: 100%;
+		height: 100%;
+		display: block;
+	}
+
+	.logo-dark {
+		display: none;
+		width: 100%;
+		height: 100%;
+	}
+
+	:global(.dark) .logo-light {
+		display: none;
+	}
+
+	:global(.dark) .logo-dark {
+		display: block;
+	}
+</style>
