@@ -71,10 +71,18 @@
 
 html {
 	scroll-behavior: smooth;
+	height: 100%;
 }
 
 body {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
 	background-color: var(--bg);
 	color: var(--text);
 	transition: background-color 0.2s, color 0.2s;
+}
+
+main {
+	flex: 1;
 }
