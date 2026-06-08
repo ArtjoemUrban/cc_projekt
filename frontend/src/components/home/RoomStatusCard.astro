@@ -1,20 +1,42 @@
 ---
-// Generiert mit Claude Opus 4.8
 import Card from "../ui/Card.astro";
+import { getOpeningHours } from "../../lib/api/openingHours";
 
-interface Props {
-	open?: boolean;
-	hours?: string;
+let todayHours: string | null = null;
+let isOpen = false;
+let error = false;
+
+try {
+	const openingHours = await getOpeningHours();
+	const weekday = new Date().getDay(); // 0=So, 1=Mo, ..., 6=Sa — passt 1:1 zum Backend
+	const today = openingHours.find((d) => d.weekday === weekday);
+
+	if (today) {
+		isOpen = today.hours !== null;
+		if (today.open_time && today.close_time) {
+			// Sekunden abschneiden falls vorhanden: "11:00:00" → "11:00"
+			const fmt = (t: string) => t.slice(0, 5);
+			todayHours = `${fmt(today.open_time)} – ${fmt(today.close_time)} Uhr`;
+		}
+	}
+} catch {
+	error = true;
 }
-
-const { open = true, hours = "11:00 – 13:00 Uhr" } = Astro.props;
 ---
 
 <Card class="p-6">
-	<p class="font-mono text-xs tracking-[0.2em] uppercase text-muted">FS-Raum gerade</p>
-	<p class:list={["mt-3 flex items-center gap-2 font-medium", open ? "text-accent" : "text-muted"]}>
-		<span class:list={["size-2.5 rounded-full", open ? "bg-accent" : "bg-muted"]}></span>
-		{open ? "Heute geöffnet" : "Gerade geschlossen"}
-	</p>
-	<p class="text-muted font-mono text-sm mt-1">{hours}</p>
+	<p class="font-mono text-xs tracking-[0.2em] uppercase text-muted">FS-Raum heute</p>
+	{
+		error ? (
+			<p class="mt-3 text-muted font-mono text-sm">Nicht verfügbar</p>
+		) : (
+			<>
+				<p class:list={["mt-3 flex items-center gap-2 font-medium", isOpen ? "text-accent" : "text-muted"]}>
+					<span class:list={["size-2.5 rounded-full", isOpen ? "bg-accent" : "bg-muted"]} />
+					{isOpen ? "Heute geöffnet" : "Heute geschlossen"}
+				</p>
+				{todayHours && <p class="text-muted font-mono text-sm mt-1">{todayHours}</p>}
+			</>
+		)
+	}
 </Card>

@@ -1,47 +1,37 @@
 ---
-// Generiert mit Claude Opus 4.8
 import Layout from "../layouts/Layout.astro";
 import PageHeader from "../components/ui/PageHeader.astro";
 import Card from "../components/ui/Card.astro";
-import Icon from "../components/ui/Icon.astro";
-import OpeningHoursList from "../components/office/OpeningHoursList.astro";
+import Badge from "../components/ui/Badge.astro";
+import LocationCard from "../components/office/LocationCard.astro";
 import { getOpeningHours } from "../lib/api/openingHours";
 
 const room = {
 	label: "FS-Büro",
 	building: "Gebäude K · EG",
 	detail: "Raum K003A",
-	// später vlt Lageplan wäre cool
 };
 
-// Hole echte Öffnungszeiten vom Backend
-let openingHoursData: any[] = [];
-let today: any = null;
+let openingHoursData: Awaited<ReturnType<typeof getOpeningHours>> = [];
+let today: (typeof openingHoursData)[number] | undefined;
 let open = false;
+let error: string | null = null;
+
+const currentWeekday = new Date().getDay();
 
 try {
 	openingHoursData = await getOpeningHours();
-	
-	// Aktueller Wochentag
-	const now = new Date();
-	const currentWeekday = now.getDay(); // 0=So, 1=Mo, ..., 6=Sa
-	
-	// Finde heute's Öffnungszeiten
 	today = openingHoursData.find((day) => day.weekday === currentWeekday);
-	
-	// Prüfe ob gerade offen
-	if (today && today.open_time && today.close_time) {
+
+	if (today?.open_time && today?.close_time) {
 		const [openHour, openMin] = today.open_time.split(":").map(Number);
 		const [closeHour, closeMin] = today.close_time.split(":").map(Number);
-		
+		const now = new Date();
 		const currentTime = now.getHours() * 60 + now.getMinutes();
-		const openTime = openHour * 60 + openMin;
-		const closeTime = closeHour * 60 + closeMin;
-		
-		open = currentTime >= openTime && currentTime < closeTime;
+		open = currentTime >= openHour * 60 + openMin && currentTime < closeHour * 60 + closeMin;
 	}
-} catch (error) {
-	console.error("Failed to fetch opening hours:", error);
+} catch (e) {
+	error = e instanceof Error ? e.message : "Fehler beim Laden der Öffnungszeiten";
 }
 ---
 
@@ -49,11 +39,46 @@ try {
 	<PageHeader
 		eyebrow={room.label}
 		title="Öffnungszeiten"
-		description="Komm einfach vorbei – während der Öffnungszeiten ist immer jemand aus der Fachschaft da. Für Equipment-Rückgabe, Beratung oder einfch  die Pause genießen am besten in diesen Zeiten:"
+		description="Komm einfach vorbei – während der Öffnungszeiten ist immer jemand aus der Fachschaft da. Für Equipment-Rückgabe, Beratung oder einfach die Pause genießen am besten in diesen Zeiten:"
 	/>
 
 	<div class="grid lg:grid-cols-2 gap-6 items-start">
-		<OpeningHoursList />
+		<!-- Öffnungszeiten-Liste -->
+		<Card class="p-2 sm:p-3">
+			{
+				error ? (
+					<p class="text-red-500 p-4">{error}</p>
+				) : (
+					<ul>
+						{openingHoursData.map((day) => {
+							const isToday = day.weekday === currentWeekday;
+							const closed = day.hours === null;
+							return (
+								<li
+									class:list={[
+										"flex items-center justify-between gap-3 px-4 py-4 rounded-ui",
+										isToday && "bg-accent-soft",
+									]}
+								>
+									<span class="flex items-center gap-3">
+										{isToday && <Badge variant="solid">Heute</Badge>}
+										<span class:list={["font-medium", isToday && "text-accent"]}>{day.name}</span>
+									</span>
+									<span
+										class:list={[
+											"font-mono text-sm",
+											closed ? "text-muted" : isToday ? "text-accent" : "text-muted",
+										]}
+									>
+										{closed ? "geschlossen" : day.hours}
+									</span>
+								</li>
+							);
+						})}
+					</ul>
+				)
+			}
+		</Card>
 
 		<div class="flex flex-col gap-4">
 			<!-- Aktueller Status -->
@@ -66,16 +91,7 @@ try {
 				{!today?.hours && <p class="text-muted font-mono text-sm mt-1">Heute geschlossen</p>}
 			</Card>
 
-			<!-- Standort -->
-			<Card class="p-6 flex items-start gap-4">
-				<span class="grid place-items-center size-10 rounded-ui-sm bg-surface-2 border border-line text-accent shrink-0">
-					<Icon name="pin" />
-				</span>
-				<div>
-					<p class="font-semibold">{room.building}</p>
-					<p class="text-muted text-sm">{room.detail}</p>
-				</div>
-			</Card>
+			<LocationCard />
 
 			<p class="text-muted text-sm leading-relaxed px-1">
 				Außerhalb der Zeiten erreichst du uns jederzeit per Mail oder Instagram. In der

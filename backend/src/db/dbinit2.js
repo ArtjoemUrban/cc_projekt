@@ -118,8 +118,20 @@ function dbinit(db) {
         FOREIGN KEY (calendar_period_id) REFERENCES calendar_periods(id),
         CHECK (time(start_time) <= time(end_time))
     );`);
-        
-    
+
+    db.exec(`CREATE TABLE IF NOT EXISTS board_members (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER,
+        name TEXT NOT NULL,
+        position TEXT NOT NULL,
+        description TEXT,
+        image_path TEXT,
+        sort_order INTEGER DEFAULT 0,
+        visible INTEGER DEFAULT 1,
+        FOREIGN KEY (user_id) REFERENCES users(id)
+    )`);
+
+
 }
 
 dbinit(db);

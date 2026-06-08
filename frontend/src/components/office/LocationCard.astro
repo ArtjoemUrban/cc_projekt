@@ -1,0 +1,39 @@
+---
+import Card from "../ui/Card.astro";
+import Icon from "../ui/Icon.astro";
+
+const room = {
+	building: "Gebäude K · EG",
+	detail: "Raum K003A · Doggenriedstraße 38",
+};
+---
+
+<Card class="overflow-hidden">
+	<div class="p-6 flex items-start gap-4 border-b border-line">
+		<span class="grid place-items-center size-10 rounded-ui-sm bg-surface-2 border border-line text-accent shrink-0">
+			<Icon name="pin" />
+		</span>
+		<div>
+			<p class="font-semibold">{room.building}</p>
+			<p class="text-muted text-sm">{room.detail}</p>
+		</div>
+	</div>
+
+	<div class="relative h-64">
+		<iframe
+			title="Standort Fachschaft E – Gebäude K, RWU Weingarten"
+			src="https://www.openstreetmap.org/export/embed.html?bbox=9.6481%2C47.8112%2C9.6531%2C47.8142&layer=mapnik&marker=47.812708%2C9.650567"
+			class="w-full h-full border-0"
+			loading="lazy"
+			allowfullscreen
+		></iframe>
+		<a
+			href="https://www.openstreetmap.org/?mlat=47.812708&mlon=9.650567#map=19/47.812708/9.650567"
+			target="_blank"
+			rel="noopener noreferrer"
+			class="absolute bottom-2 right-2 text-xs bg-surface-1 border border-line rounded px-2 py-1 text-muted hover:text-accent transition-colors"
+		>
+			Größere Karte
+		</a>
+	</div>
+</Card>
