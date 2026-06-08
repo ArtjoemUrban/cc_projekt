@@ -36,3 +36,14 @@ export interface OpeningDay {
 	name: string; // Wochentag
 	hours: string | null; // null = geschlossen
 }
+
+export interface BoardMember {
+	id: number;
+	user_id: number | null;
+	name: string;
+	position: string;
+	description: string | null;
+	image_path: string | null;
+	sort_order: number;
+	visible: number;
+}

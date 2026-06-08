@@ -1,9 +1,17 @@
 ---
-// Generiert mit Claude Opus 4.8
 import Layout from "../layouts/Layout.astro";
 import PageHeader from "../components/ui/PageHeader.astro";
 import MemberCard from "../components/members/MemberCard.astro";
-import { members } from "../data/members";
+import { getBoardMembers } from "../lib/api/boardMembers";
+
+let members: Awaited<ReturnType<typeof getBoardMembers>> = [];
+let error: string | null = null;
+
+try {
+	members = await getBoardMembers();
+} catch (e) {
+	error = e instanceof Error ? e.message : "Fehler beim Laden der Mitglieder";
+}
 ---
 
 <Layout title="Mitglieder">
@@ -13,7 +21,13 @@ import { members } from "../data/members";
 		description="Diese Menschen halten die Fachschaft am Laufen – von Hochschulpolitik über Events bis zum Equipment-Verleih. Schreib uns einfach, wenn du Fragen hast oder mitmachen willst."
 	/>
 
-	<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-		{members.map((member) => <MemberCard member={member} />)}
-	</div>
+	{error ? (
+		<p class="text-red-500">{error}</p>
+	) : members.length === 0 ? (
+		<p class="text-muted">Noch keine Mitglieder eingetragen.</p>
+	) : (
+		<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+			{members.map((member) => <MemberCard member={member} />)}
+		</div>
+	)}
 </Layout>

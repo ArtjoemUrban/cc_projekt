@@ -134,6 +134,30 @@ export async function deleteInventoryItem(id: number) {
 	return request(`/inventory/${id}`, { method: "DELETE", auth: true });
 }
 
+/* ---------------------- Boardmitglieder (Public) ---------------------- */
+
+export async function getBoardMembers() {
+	return request("/board-members");
+}
+
+/* --------------------- Boardmitglieder (Admin) ----------------------- */
+
+export async function getAllBoardMembers() {
+	return request("/board-members/all", { auth: true });
+}
+
+export async function createBoardMember(payload: Record<string, unknown>) {
+	return request("/board-members", { method: "POST", body: payload, auth: true });
+}
+
+export async function updateBoardMember(id: number, payload: Record<string, unknown>) {
+	return request(`/board-members/${id}`, { method: "PUT", body: payload, auth: true });
+}
+
+export async function deleteBoardMember(id: number) {
+	return request(`/board-members/${id}`, { method: "DELETE", auth: true });
+}
+
 /* ----------------------- Öffnungszeiten (Admin) ----------------------- */
 
 export async function updateOpeningHours(weekday: number, open_time: string, close_time: string) {
