@@ -19,8 +19,21 @@ const room = {
 		</div>
 	</div>
 
-	<!-- Lageplan-Platzhalter -->
-	<div class="min-h-48 flex items-center justify-center text-muted font-mono text-sm bg-surface-2">
-		Lageplan – folgt demnächst
+	<div class="relative h-64">
+		<iframe
+			title="Standort Fachschaft E – Gebäude K, RWU Weingarten"
+			src="https://www.openstreetmap.org/export/embed.html?bbox=9.6481%2C47.8113%2C9.6531%2C47.8143&layer=mapnik&marker=47.812778%2C9.650567"
+			class="w-full h-full border-0"
+			loading="lazy"
+			allowfullscreen
+		></iframe>
+		<a
+			href="https://www.openstreetmap.org/?mlat=47.812778&mlon=9.650567#map=19/47.812778/9.650567"
+			target="_blank"
+			rel="noopener noreferrer"
+			class="absolute bottom-2 right-2 text-xs bg-surface-1 border border-line rounded px-2 py-1 text-muted hover:text-accent transition-colors"
+		>
+			Größere Karte
+		</a>
 	</div>
 </Card>
