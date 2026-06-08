@@ -12,7 +12,7 @@ const { member } = Astro.props;
 <Card class="p-6 flex flex-col items-center text-center gap-3">
 	{member.image_path ? (
 		<img
-			src={member.image_path}
+			src={member.image_path.startsWith("http") ? member.image_path : `http://localhost:3000${member.image_path}`}
 			alt={member.name}
 			class="size-20 rounded-full object-cover border border-line"
 		/>

@@ -1,14 +1,19 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 import db from './db/db.js';
 import bycrypt from 'bcrypt';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 dotenv.config();
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use('/uploads', express.static(join(__dirname, '../uploads')));
 
 // admin user anlegen, falls noch nicht vorhanden
 const adminUser = db.prepare("SELECT * FROM users WHERE role = ?").get('admin');

@@ -146,6 +146,20 @@ export async function getAllBoardMembers() {
 	return request("/board-members/all", { auth: true });
 }
 
+export async function uploadBoardMemberImage(file: File): Promise<{ url: string }> {
+	const token = getToken();
+	const form = new FormData();
+	form.append("image", file);
+	const res = await fetch(`${API_URL}/board-members/upload`, {
+		method: "POST",
+		headers: token ? { Authorization: `Bearer ${token}` } : {},
+		body: form,
+	});
+	const data = await res.json().catch(() => ({}));
+	if (!res.ok) throw new ApiError(res.status, data.message || `Fehler ${res.status}`);
+	return data;
+}
+
 export async function createBoardMember(payload: Record<string, unknown>) {
 	return request("/board-members", { method: "POST", body: payload, auth: true });
 }

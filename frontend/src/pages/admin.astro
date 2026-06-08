@@ -153,10 +153,17 @@ const btnOutline =
 						<span class="font-medium">Beschreibung</span>
 						<textarea class={inputClass} name="description" rows="2" placeholder="Studiengang, Bio, …"></textarea>
 					</label>
-					<label class={labelClass}>
-						<span class="font-medium">Bild-Pfad / URL</span>
-						<input class={inputClass} name="image_path" placeholder="/images/member.jpg" />
-					</label>
+					<div class={labelClass}>
+						<span class="font-medium">Bild</span>
+						<div class="flex items-center gap-3">
+							<img id="board-img-preview" src="" alt="" class="hidden size-14 rounded-full object-cover border border-line" />
+							<label class={"cursor-pointer " + btnOutline}>
+								Bild auswählen
+								<input type="file" id="board-img-file" accept="image/*" class="sr-only" />
+							</label>
+						</div>
+						<input type="hidden" name="image_path" />
+					</div>
 					<label class={labelClass}>
 						<span class="font-medium">Reihenfolge</span>
 						<input class={inputClass} type="number" name="sort_order" value="0" min="0" />
@@ -230,6 +237,7 @@ const btnOutline =
 		createBoardMember,
 		updateBoardMember,
 		deleteBoardMember,
+		uploadBoardMemberImage,
 	} from "../lib/api";
 	import { getPayload, clearToken } from "../lib/auth";
 
@@ -596,32 +604,71 @@ const btnOutline =
 		}
 	}
 
+	const boardImgFile = document.getElementById("board-img-file") as HTMLInputElement;
+	const boardImgPreview = document.getElementById("board-img-preview") as HTMLImageElement;
+
+	function setBoardPreview(url: string) {
+		if (url) {
+			boardImgPreview.src = url;
+			boardImgPreview.classList.remove("hidden");
+		} else {
+			boardImgPreview.src = "";
+			boardImgPreview.classList.add("hidden");
+		}
+	}
+
 	function fillBoardForm(m: any) {
 		field(boardForm, "id").value = m.id;
 		field(boardForm, "name").value = m.name ?? "";
 		field(boardForm, "position").value = m.position ?? "";
 		boardForm.description.value = m.description ?? "";
-		boardForm.image_path.value = m.image_path ?? "";
+		field(boardForm, "image_path").value = m.image_path ?? "";
 		boardForm.sort_order.value = m.sort_order ?? 0;
 		(boardForm.visible as HTMLInputElement).checked = !!m.visible;
+		setBoardPreview(m.image_path ? `http://localhost:3000${m.image_path}` : "");
+		boardImgFile.value = "";
 		document.getElementById("board-form-title")!.textContent = "Boardmitglied bearbeiten";
 		boardForm.scrollIntoView({ behavior: "smooth", block: "center" });
 	}
 
+	function resetBoardForm() {
+		boardForm.reset();
+		field(boardForm, "id").value = "";
+		field(boardForm, "image_path").value = "";
+		(boardForm.visible as HTMLInputElement).checked = true;
+		setBoardPreview("");
+		document.getElementById("board-form-title")!.textContent = "Neues Boardmitglied";
+	}
+
 	function setupBoard() {
-		boardForm.querySelector("[data-reset]")!.addEventListener("click", () => {
-			boardForm.reset();
-			field(boardForm, "id").value = "";
-			(boardForm.visible as HTMLInputElement).checked = true;
-			document.getElementById("board-form-title")!.textContent = "Neues Boardmitglied";
+		boardImgFile.addEventListener("change", () => {
+			const file = boardImgFile.files?.[0];
+			if (file) setBoardPreview(URL.createObjectURL(file));
 		});
+
+		boardForm.querySelector("[data-reset]")!.addEventListener("click", resetBoardForm);
+
 		boardForm.addEventListener("submit", async (e) => {
 			e.preventDefault();
+
+			let imagePath = field(boardForm, "image_path").value || null;
+
+			const file = boardImgFile.files?.[0];
+			if (file) {
+				try {
+					const { url } = await uploadBoardMemberImage(file);
+					imagePath = url;
+				} catch (err) {
+					showFlash(`Bild-Upload fehlgeschlagen: ${(err as Error).message}`, false);
+					return;
+				}
+			}
+
 			const payload = {
 				name: field(boardForm, "name").value.trim(),
 				position: field(boardForm, "position").value.trim(),
 				description: boardForm.description.value.trim() || null,
-				image_path: boardForm.image_path.value.trim() || null,
+				image_path: imagePath,
 				sort_order: Number(boardForm.sort_order.value) || 0,
 				visible: (boardForm.visible as HTMLInputElement).checked,
 			};
@@ -633,10 +680,7 @@ const btnOutline =
 					await createBoardMember(payload);
 					showFlash("Boardmitglied erstellt.");
 				}
-				boardForm.reset();
-				field(boardForm, "id").value = "";
-				(boardForm.visible as HTMLInputElement).checked = true;
-				document.getElementById("board-form-title")!.textContent = "Neues Boardmitglied";
+				resetBoardForm();
 				loadBoard();
 			} catch (err) {
 				showFlash((err as Error).message, false);
