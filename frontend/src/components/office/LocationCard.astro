@@ -1,0 +1,26 @@
+---
+import Card from "../ui/Card.astro";
+import Icon from "../ui/Icon.astro";
+
+const room = {
+	building: "Gebäude K · EG",
+	detail: "Raum K003A",
+};
+---
+
+<Card class="overflow-hidden">
+	<div class="p-6 flex items-start gap-4 border-b border-line">
+		<span class="grid place-items-center size-10 rounded-ui-sm bg-surface-2 border border-line text-accent shrink-0">
+			<Icon name="pin" />
+		</span>
+		<div>
+			<p class="font-semibold">{room.building}</p>
+			<p class="text-muted text-sm">{room.detail}</p>
+		</div>
+	</div>
+
+	<!-- Lageplan-Platzhalter -->
+	<div class="min-h-48 flex items-center justify-center text-muted font-mono text-sm bg-surface-2">
+		Lageplan – folgt demnächst
+	</div>
+</Card>
