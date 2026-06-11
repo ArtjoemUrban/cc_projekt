@@ -279,7 +279,14 @@ const btnOutline =
 			if (me.role !== "admin") {
 				guard.innerHTML =
 					'<div class="text-center"><p class="mb-2">Kein Zugriff – dieser Bereich ist nur für Admins.</p>' +
-					'<a class="text-accent underline" href="/">Zur Startseite</a></div>';
+					'<div class="flex gap-4 justify-center mt-2">' +
+					'<a class="text-accent underline" href="/">Zur Startseite</a>' +
+					'<button id="guard-logout-btn" class="text-accent underline">Abmelden</button>' +
+					'</div></div>';
+				document.getElementById("guard-logout-btn")!.addEventListener("click", () => {
+					clearToken();
+					window.location.href = "/login";
+				});
 				return;
 			}
 			document.getElementById("admin-username")!.textContent = me.username;

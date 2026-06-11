@@ -95,7 +95,7 @@ export async function registerUser(payload: {
 	username: string;
 	password: string;
 }) {
-	return request("/auth/register", { method: "POST", body: payload });
+	return request("/auth/register", { method: "POST", body: payload, auth: true });
 }
 
 export async function changeUserRole(username: string, newRole: string) {

@@ -30,10 +30,8 @@ export default function calendarPeriodsRoutes(db) {
   });
 
   // type: 'holiday', 'closed', 'exams'
-  router.post("/", verifyJwt, isAdmin, (req, res) => {
+  router.post("/", verifyJwt, isAdmin, checkRequiredFields(["start_date", "end_date", "type"]), (req, res) => {
     const body = req.body || {};
-    const requiredFields = [ "start_date", "end_date", "type"];
-    checkRequiredFields(requiredFields)(req, res, () => {});
     if (!["holiday", "closed", "exams"].includes(body.type)) {
       return res.status(400).json({ message: "Invalid type. Must be 'holiday', 'closed', or 'exams'." });
     }
@@ -91,20 +89,17 @@ export default function calendarPeriodsRoutes(db) {
     }
   });
 
-  router.post("/period-openings/:weekday", verifyJwt, isAdmin, (req, res) => {
+  router.post("/period-openings/:weekday", verifyJwt, isAdmin, checkRequiredFields(["period_id", "open_time", "close_time"]), (req, res) => {
     const weekday = parseInt(req.params.weekday);
     if (![1, 2, 3, 4, 5, 6, 0].includes(parseInt(weekday))) {
       return res.status(400).json({ message: "Invalid weekday. Must be 0 (Sunday) to 6 (Saturday)." });
     }
 
     const body = req.body || {};
-    const requiredFields = ["period_id", "open_time", "close_time"];
-    checkRequiredFields(requiredFields)(req, res, () => {});
-    
     const { period_id, open_time, close_time } = body;
     try {
       const stmt = db.prepare("INSERT INTO calendar_period_openings (weekday, calendar_period_id, start_time, end_time) VALUES (?, ?, ?, ?)");
-      const result = stmt.run(weekday, period_id, open_time, close_time);s
+      const result = stmt.run(weekday, period_id, open_time, close_time);
       res.status(201).json({ id: result.lastInsertRowid, weekday, period_id, open_time, close_time });
     } catch (error) {
       res.status(500).json({ message: "Internal Server Error" });
