@@ -1,3 +1,5 @@
+// Ignoriere node_modules, Umgebungsdateien und Uploads
 node_modules/
+//
 .env
 uploads/
