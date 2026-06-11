@@ -1,8 +1,9 @@
-// Generiert mit Claude Opus 4.8
-import { createMemo, createSignal, For, Show } from "solid-js";
+// Generiert mit Claude Opus 4.8 und manuell bearbeitet
+import { createMemo, For, Show } from "solid-js";
 import Icon from "../ui/Icon";
 import FilterChips from "../ui/FilterChips";
 import type { InventoryItem } from "../../lib/types";
+import { createStore } from "solid-js/store";
 
 /**
  * Inventar mit Suche, Kategorie- und Status-Filter.
@@ -13,19 +14,17 @@ export default function InventoryBoard(props: {
 	categories: string[];
 	admin?: boolean;
 }) {
-	const [query, setQuery] = createSignal("");
-	const [category, setCategory] = createSignal("Alle");
-	const [status, setStatus] = createSignal("Alle");
+	const [filters, setFilters] = createStore({ query: "", category: "Alle", status: "Alle" });
 
 	const filtered = createMemo(() => {
-		const q = query().trim().toLowerCase();
+		const q = filters.query.trim().toLowerCase();
 		return props.items.filter((item) => {
 			const matchesQuery = !q || item.name.toLowerCase().includes(q) || item.description.toLowerCase().includes(q);
-			const matchesCategory = category() === "Alle" || item.category === category();
+			const matchesCategory = filters.category === "Alle" || item.category === filters.category;
 			const matchesStatus =
-				status() === "Alle" ||
-				(status() === "Verfügbar" && item.status === "available") ||
-				(status() === "Ausgeliehen" && item.status === "borrowed");
+				filters.status === "Alle" ||
+				(filters.status === "Verfügbar" && item.status === "available") ||
+				(filters.status === "Ausgeliehen" && item.status === "borrowed");
 			return matchesQuery && matchesCategory && matchesStatus;
 		});
 	});
@@ -40,20 +39,20 @@ export default function InventoryBoard(props: {
 					</span>
 					<input
 						type="search"
-						value={query()}
-						onInput={(e) => setQuery(e.currentTarget.value)}
+						value={filters.query}
+						onInput={(e) => setFilters("query", e.currentTarget.value)}
 						placeholder="Suchen…"
 						class="w-full bg-surface border border-line rounded-full pl-10 pr-4 py-2.5 text-sm outline-none focus:border-accent transition-colors"
 					/>
 				</div>
 				<div class="flex-1">
-					<FilterChips options={["Alle", ...props.categories]} value={category()} onChange={setCategory} />
+					<FilterChips options={["Alle", ...props.categories]} value={filters.category} onChange={(v) => setFilters("category", v)} />
 				</div>
 			</div>
 
 			{/* Status-Filter + Admin-Aktion */}
 			<div class="flex flex-wrap items-center justify-between gap-3">
-				<FilterChips options={["Alle", "Verfügbar", "Ausgeliehen"]} value={status()} onChange={setStatus} />
+				<FilterChips options={["Alle", "Verfügbar", "Ausgeliehen"]} value={filters.status} onChange={(v) => setFilters("status", v)} />
 				<Show when={props.admin}>
 					<button
 						type="button"
