@@ -7,7 +7,7 @@ export default function userRoutes(db) {
 
     router.get("/me", verifyJwt, async (req, res) => {
         try {
-        const user = db.prepare("SELECT * FROM users WHERE id = ?").get(req.user.id);
+        const user = db.prepare("SELECT id, username, email, role FROM users WHERE id = ?").get(req.user.id);
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -18,15 +18,15 @@ export default function userRoutes(db) {
         }
     });
 
-    router.get("/",  verifyJwt, async (req, res) => {
+    router.get("/",  verifyJwt, isAdmin, async (req, res) => {
         console.log("Fetching all users");
-        const users = db.prepare("SELECT * FROM users").all();
+        const users = db.prepare("SELECT id, username, email, role FROM users").all();
         res.status(200).json(users);
     });
     
     router.get("/id/:id", verifyJwt, async (req, res) => {
         console.log(`Fetching user with id: ${req.params.id}`);
-        const user = db.prepare("SELECT * FROM users WHERE id = ?").get(req.params.id);
+        const user = db.prepare("SELECT id, username, email, role FROM users WHERE id = ?").get(req.params.id);
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -35,7 +35,7 @@ export default function userRoutes(db) {
 
      router.get("/username/:username", verifyJwt, async (req, res) => {
         console.log(`Fetching user with username: ${req.params.username}`);
-        const user = db.prepare("SELECT * FROM users WHERE username = ?").get(req.params.username);
+        const user = db.prepare("SELECT id, username, email, role FROM users WHERE username = ?").get(req.params.username);
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -44,7 +44,7 @@ export default function userRoutes(db) {
 
     router.get("/email/:email", verifyJwt, async (req, res) => {
         console.log(`Fetching user with email: ${req.params.email}`);
-        const user = db.prepare("SELECT * FROM users WHERE email = ?").get(req.params.email);
+        const user = db.prepare("SELECT id, username, email, role FROM users WHERE email = ?").get(req.params.email);
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -79,14 +79,14 @@ export default function userRoutes(db) {
         if (!user) {
             return res.status(409).json({ message: "User not found" });
         }
-        const passwordMatch = await bcrypt.compare(oldPassword, user.password_hash);
+        const passwordMatch = await bcrypt.compare(oldPassword, user.password);
         if (!passwordMatch) {
             return res.status(400).json({ message: "Old password is incorrect" });
         }
-        
+
         const salt  = bcrypt.genSaltSync(10);
         const newPasswordHash = await bcrypt.hash(newPassword, salt);
-        db.prepare("UPDATE users SET password_hash = ?, updated_at = CURRENT_TIMESTAMP WHERE username = ?").run(newPasswordHash, username);
+        db.prepare("UPDATE users SET password = ?, updated_at = CURRENT_TIMESTAMP WHERE username = ?").run(newPasswordHash, username);
 
         res.json({ message: "Password changed successfully" });
     } catch (error) {
@@ -109,7 +109,7 @@ export default function userRoutes(db) {
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         } 
-        const passwordMatch = await bcrypt.compare(password, user.password_hash);
+        const passwordMatch = await bcrypt.compare(password, user.password);
         if (!passwordMatch) {
             return res.status(400).json({ message: "Password is incorrect" });
         }

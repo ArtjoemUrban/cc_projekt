@@ -9,9 +9,19 @@ import bycrypt from 'bcrypt';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 dotenv.config();
+
+// Pflichtfelder beim Start prüfen
+const required = ["JWT_SECRET", "INITIAL_ADMIN_USER", "INITIAL_ADMIN_PASSWORD"];
+for (const key of required) {
+  if (!process.env[key]) {
+    console.error(`Fehlende Umgebungsvariable: ${key}`);
+    process.exit(1);
+  }
+}
+
 const app = express();
 
-app.use(cors());
+app.use(cors({ origin: process.env.CORS_ORIGIN || "http://localhost:4321" }));
 app.use(express.json());
 app.use('/uploads', express.static(join(__dirname, '../uploads')));
 

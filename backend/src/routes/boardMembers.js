@@ -15,11 +15,14 @@ const storage = multer.diskStorage({
   },
 });
 
+// Multer-Setup: nur Bilder, max 5 MB, Speicherung in uploads/members
 const upload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB
+  limits: { fileSize: (Number(process.env.UPLOAD_MAX_SIZE_MB) || 5) * 1024 * 1024 },
   fileFilter: (_req, file, cb) => {
-    if (file.mimetype.startsWith("image/")) cb(null, true);
+    const allowedExtensions = [".jpg", ".jpeg", ".png", ".gif", ".webp"];
+    const ext = extname(file.originalname).toLowerCase();
+    if (allowedExtensions.includes(ext)) cb(null, true);
     else cb(new Error("Nur Bilddateien erlaubt"));
   },
 });
