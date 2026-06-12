@@ -31,7 +31,23 @@ import Courses from "./Courses.astro";
 			Instagram
 		</Button>
 	</div>
-	<div class="mt-6">
-		<Courses />
-	</div>
+
+	<Card class="p-6 flex flex-col gap-4">
+		<div>
+			<h2 class="font-mono text-xs tracking-[0.2em] uppercase text-muted mb-3">Sitzung</h2>
+			<p class="text-sm leading-relaxed mb-3">
+				Unsere Sitzungen sind offen für alle die Interesse haben. Kommt auch gerne einfach mal vorbei um euch einen Eindruck zu machen.
+			</p>
+			<p class="font-mono text-sm text-accent">i. d. R. jeden Dienstag, 13:20 – 14:00 Uhr</p>
+		</div>
+		<div>
+			<h2 class="font-mono text-xs tracking-[0.2em] uppercase text-muted mb-3">Stammtisch</h2>
+			<p class="text-sm leading-relaxed mb-3">
+				Unser Stammtisch ist offen für alle die Interesse haben. Kommt auch gerne einfach mal vorbei um euch einen Eindruck zu machen.
+			</p>
+			<p class="font-mono text-sm text-accent">i. d. R. jeden Dienstag, 13:20 – 14:00 Uhr</p>
+		</div>
+	</Card>
+
+	<Courses />
 </Card>
