@@ -36,53 +36,15 @@ try {
 ---
 
 <Layout title="Öffnungszeiten">
-	<PageHeader
-		eyebrow={room.label}
-		title="Öffnungszeiten"
-		description="Komm einfach vorbei – während der Öffnungszeiten ist immer jemand aus der Fachschaft da. Für Equipment-Rückgabe, Beratung oder einfach die Pause genießen am besten in diesen Zeiten:"
-	/>
+	<div class="flex flex-col flex-1 gap-6">
+		<PageHeader
+			eyebrow={room.label}
+			title="Öffnungszeiten"
+		/>
 
-	<div class="grid lg:grid-cols-2 gap-6 items-start">
-		<!-- Öffnungszeiten-Liste -->
-		<Card class="p-2 sm:p-3">
-			{
-				error ? (
-					<p class="text-red-500 p-4">{error}</p>
-				) : (
-					<ul>
-						{openingHoursData.map((day) => {
-							const isToday = day.weekday === currentWeekday;
-							const closed = day.hours === null;
-							return (
-								<li
-									class:list={[
-										"flex items-center justify-between gap-3 px-4 py-4 rounded-ui",
-										isToday && "bg-accent-soft",
-									]}
-								>
-									<span class="flex items-center gap-3">
-										{isToday && <Badge variant="solid">Heute</Badge>}
-										<span class:list={["font-medium", isToday && "text-accent"]}>{day.name}</span>
-									</span>
-									<span
-										class:list={[
-											"font-mono text-sm",
-											closed ? "text-muted" : isToday ? "text-accent" : "text-muted",
-										]}
-									>
-										{closed ? "geschlossen" : day.hours}
-									</span>
-								</li>
-							);
-						})}
-					</ul>
-				)
-			}
-		</Card>
-
-		<div class="flex flex-col gap-4">
-			<!-- Aktueller Status -->
-			<Card class="p-6">
+		<div class="grid lg:grid-cols-2 lg:grid-rows-[auto_1fr] gap-6 flex-1">
+			<!-- Aktueller Status: auf Mobile zuerst, auf Desktop rechts oben -->
+			<Card class="p-6 lg:col-start-2 lg:row-start-1">
 				<p class:list={["flex items-center gap-2 font-medium", open ? "text-accent" : "text-muted"]}>
 					<span class:list={["size-2.5 rounded-full", open ? "bg-accent" : "bg-muted"]}></span>
 					{open ? "Gerade geöffnet" : "Gerade geschlossen"}
@@ -91,12 +53,52 @@ try {
 				{!today?.hours && <p class="text-muted font-mono text-sm mt-1">Heute geschlossen</p>}
 			</Card>
 
-			<LocationCard />
+			<!-- Öffnungszeiten-Liste: auf Mobile zweite, auf Desktop links spanning beide Zeilen -->
+			<Card class="p-2 sm:p-3 lg:col-start-1 lg:row-start-1 lg:row-span-2 lg:h-full">
+				{
+					error ? (
+						<p class="text-red-500 p-4">{error}</p>
+					) : (
+						<ul>
+							{openingHoursData.map((day) => {
+								const isToday = day.weekday === currentWeekday;
+								const closed = day.hours === null;
+								return (
+									<li
+										class:list={[
+											"flex items-center justify-between gap-3 px-4 py-4 rounded-ui",
+											isToday && "bg-accent-soft",
+										]}
+									>
+										<span class="flex items-center gap-3">
+											{isToday && <Badge variant="solid">Heute</Badge>}
+											<span class:list={["font-medium", isToday && "text-accent"]}>{day.name}</span>
+										</span>
+										<span
+											class:list={[
+												"font-mono text-sm",
+												closed ? "text-muted" : isToday ? "text-accent" : "text-muted",
+											]}
+										>
+											{closed ? "geschlossen" : day.hours}
+										</span>
+									</li>
+								);
+							})}
+						</ul>
+					)
+				}
+			</Card>
 
-			<p class="text-muted text-sm leading-relaxed px-1">
-				Außerhalb der Zeiten erreichst du uns jederzeit per <a href="fse@rwu.de" class="text-accent hover:underline">Mail</a> oder <a href="https://www.instagram.com/fachschaft/" class="text-accent hover:underline">Instagram</a>. In der
-				vorlesungsfreien Zeit gelten Sonderzeiten.
-			</p>
+			<!-- Location: auf Mobile dritte, auf Desktop rechts unten -->
+			<div class="min-h-0 h-full lg:col-start-2 lg:row-start-2">
+				<LocationCard />
+			</div>
 		</div>
+
+		<p class="text-muted text-sm leading-relaxed px-1">
+			Außerhalb der Zeiten erreichst du uns jederzeit per <a href="fse@rwu.de" class="text-accent hover:underline">Mail</a> oder <a href="https://www.instagram.com/fachschaft/" class="text-accent hover:underline">Instagram</a>. In der
+			vorlesungsfreien Zeit gelten Sonderzeiten.
+		</p>
 	</div>
 </Layout>

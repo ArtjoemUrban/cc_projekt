@@ -9,10 +9,13 @@ import AdminUsers from "./AdminUsers";
 
 type Tab = "events" | "inventory" | "hours" | "board" | "users";
 
-const TABS: { id: Tab; label: string }[] = [
+const MEMBER_TABS: { id: Tab; label: string }[] = [
 	{ id: "events", label: "Events" },
 	{ id: "inventory", label: "Inventar" },
 	{ id: "hours", label: "Öffnungszeiten" },
+];
+
+const ADMIN_TABS: { id: Tab; label: string }[] = [
 	{ id: "board", label: "Boardmitglieder" },
 	{ id: "users", label: "Benutzer" },
 ];
@@ -30,7 +33,7 @@ export default function AdminPanel() {
 			return null;
 		}
 		const user = await getMe();
-		if (user.role !== "admin") return null;
+		if (user.role !== "admin" && user.role !== "member") return null;
 		return user;
 	});
 
@@ -64,7 +67,7 @@ export default function AdminPanel() {
 			<Match when={me() === null && !me.loading}>
 				<div class="min-h-[50vh] grid place-items-center">
 					<div class="text-center">
-						<p class="mb-2">Kein Zugriff – dieser Bereich ist nur für Admins.</p>
+						<p class="mb-2">Kein Zugriff – dieser Bereich ist nur für Mitglieder.</p>
 						<a class="text-accent underline" href="/">Zur Startseite</a>
 					</div>
 				</div>
@@ -86,7 +89,19 @@ export default function AdminPanel() {
 					</header>
 
 					<div class="flex flex-wrap gap-2 border-b border-line pb-3" role="tablist">
-						{TABS.map((t) => (
+						{MEMBER_TABS.map((t) => (
+							<button
+								class={tabClass}
+								classList={{
+									"bg-accent-soft text-accent": activeTab() === t.id,
+									"text-muted hover:text-text hover:bg-surface-2": activeTab() !== t.id,
+								}}
+								onClick={() => setActiveTab(t.id)}
+							>
+								{t.label}
+							</button>
+						))}
+						{me()!.role === "admin" && ADMIN_TABS.map((t) => (
 							<button
 								class={tabClass}
 								classList={{

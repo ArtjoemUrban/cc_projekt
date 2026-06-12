@@ -4,8 +4,9 @@ import Layout from "../layouts/Layout.astro";
 import Card from "../components/ui/Card.astro";
 import Hero from "../components/home/Hero.astro";
 import RoomStatusCard from "../components/home/RoomStatusCard.astro";
+import NextEventCard from "../components/home/NextEventCard.astro";
 import LocationCard from "../components/office/LocationCard.astro";
-import gruppenbild from "../assets/FSE_Guppenbild.jpeg";
+import gruppenbild from "../assets/based_man.jpg";
 ---
 
 <Layout title="Fachschaft E ">
@@ -14,17 +15,12 @@ import gruppenbild from "../assets/FSE_Guppenbild.jpeg";
 
 		<div class="flex flex-col gap-6">
 			<Card class="overflow-hidden">
-				<img src={gruppenbild.src} alt="Fachschaftsgruppenbild" class="w-full h-64 object-cover" />
+				<img src={gruppenbild.src} alt="Fachschaftsgruppenbild" class="w-full h-200 object-cover object-[center_300%]" />
 			</Card>
 			<RoomStatusCard />
+			<NextEventCard />
 			<LocationCard />
-			<Card class="p-6">
-				<h2 class="font-mono text-xs tracking-[0.2em] uppercase text-muted mb-3">Sitzung</h2>
-				<p class="text-sm leading-relaxed mb-3">
-					Unsere Sitzungen sind offen für alle die Interesse haben. Kommt auch gerne einfach mal vorbei um euch einen Eindruck zu machen.
-				</p>
-				<p class="font-mono text-sm text-accent">i. d. R. jeden Dienstag, 13:20 – 14:00 Uhr</p>
-			</Card>
+			
 		</div>
 	</div>
 </Layout>

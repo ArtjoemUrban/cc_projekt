@@ -1,0 +1,72 @@
+---
+import Card from "../ui/Card.astro";
+import { dateParts, longDate } from "../../lib/format";
+import type { EventItem } from "../../lib/types";
+
+const API_URL = "http://localhost:3000";
+
+let nextEvent: EventItem | null = null;
+let error = false;
+
+try {
+	const res = await fetch(`${API_URL}/events`);
+	if (!res.ok) throw new Error();
+	const events: EventItem[] = await res.json();
+
+	const today = new Date().toISOString().slice(0, 10);
+	nextEvent = events
+		.filter((e) => e.date >= today)
+		.sort((a, b) => a.date.localeCompare(b.date))[0] ?? null;
+} catch {
+	error = true;
+}
+
+const parts = nextEvent ? dateParts(nextEvent.date) : null;
+const full = nextEvent ? nextEvent.taken >= nextEvent.capacity : false;
+---
+
+<Card class="p-6">
+	<p class="font-mono text-xs tracking-[0.2em] uppercase text-muted mb-3">Nächstes Event</p>
+
+	{error && <p class="text-muted font-mono text-sm">Nicht verfügbar</p>}
+
+	{!error && !nextEvent && <p class="text-muted font-mono text-sm">Keine Events geplant</p>}
+
+	{!error && nextEvent && parts && (
+		<div class="flex items-start gap-4">
+			<!-- Datumskachel -->
+			<div class="shrink-0 size-14 rounded-ui bg-surface-2 border border-line grid place-content-center text-center">
+				<span class="text-xl font-bold leading-none text-accent">{parts.day}</span>
+				<span class="font-mono text-[10px] tracking-widest text-muted mt-1">{parts.month}</span>
+			</div>
+
+			<!-- Inhalt -->
+			<div class="flex-1 min-w-0">
+				<div class="flex flex-wrap items-center gap-2 mb-1">
+					<span class="font-semibold truncate">{nextEvent.title}</span>
+					<span class="bg-accent-soft text-accent px-2 py-0.5 rounded-full text-xs font-mono shrink-0">
+						{nextEvent.category}
+					</span>
+				</div>
+				<p class="font-mono text-xs text-muted">{longDate(nextEvent.date)} · {nextEvent.time}</p>
+				<p class="font-mono text-xs text-muted mt-0.5">{nextEvent.location}</p>
+				<div class="flex items-center justify-between mt-3">
+					<span class="font-mono text-xs text-muted">
+						{nextEvent.taken}/{nextEvent.capacity} Plätze
+					</span>
+					<a
+						href="/events"
+						class:list={[
+							"text-xs font-medium px-3 py-1.5 rounded-ui transition-colors",
+							full
+								? "bg-surface-2 text-muted border border-line"
+								: "bg-accent text-accent-contrast hover:bg-accent-strong",
+						]}
+					>
+						{full ? "Ausgebucht" : "Mehr erfahren"}
+					</a>
+				</div>
+			</div>
+		</div>
+	)}
+</Card>

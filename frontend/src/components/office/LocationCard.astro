@@ -8,8 +8,8 @@ const room = {
 };
 ---
 
-<Card class="overflow-hidden">
-	<div class="p-6 flex items-start gap-4 border-b border-line">
+<Card class="overflow-hidden h-full flex flex-col">
+	<div class="p-6 flex items-start gap-4 border-b border-line shrink-0">
 		<span class="grid place-items-center size-10 rounded-ui-sm bg-surface-2 border border-line text-accent shrink-0">
 			<Icon name="pin" />
 		</span>
@@ -19,11 +19,11 @@ const room = {
 		</div>
 	</div>
 
-	<div class="relative h-64">
+	<div class="relative flex-1 min-h-32">
 		<iframe
 			title="Standort Fachschaft E – Gebäude K, RWU Weingarten"
 			src="https://www.openstreetmap.org/export/embed.html?bbox=9.6481%2C47.8112%2C9.6531%2C47.8142&layer=mapnik&marker=47.812708%2C9.650567"
-			class="w-full h-full border-0"
+			class="absolute inset-0 w-full h-full border-0"
 			loading="lazy"
 			allowfullscreen
 		></iframe>
