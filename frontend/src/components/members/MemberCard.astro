@@ -14,7 +14,9 @@ const { member } = Astro.props;
 		<img
 			src={member.image_path.startsWith("http") ? member.image_path : `http://localhost:3000${member.image_path}`}
 			alt={member.name}
-			class="size-20 rounded-full object-cover border border-line"
+			class="size-20 rounded-full object-cover border border-line cursor-zoom-in"
+			data-lightbox-src={member.image_path.startsWith("http") ? member.image_path : `http://localhost:3000${member.image_path}`}
+			data-lightbox-alt={member.name}
 		/>
 	) : (
 		<div class="size-20 rounded-full bg-surface-2 border border-line grid place-items-center font-mono text-xs text-muted">
