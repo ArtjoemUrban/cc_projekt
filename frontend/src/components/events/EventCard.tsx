@@ -1,11 +1,12 @@
 import { Show } from "solid-js";
 import Icon from "../ui/Icon";
-import { dateParts, longDate, shortTime } from "../../lib/format";
+import { dateParts, longDate, shortDate, shortTime } from "../../lib/format";
 import type { EventItem } from "../../lib/types";
 
 export default function EventCard(props: { event: EventItem }) {
 	const e = (): EventItem => props.event;
 	const parts = () => dateParts(e().start_time);
+	const multiDay = () => e().start_time.slice(0, 10) !== e().end_time.slice(0, 10);
 
 	return (
 		<article class="bg-surface border border-line rounded-ui-lg p-5 flex flex-col sm:flex-row gap-5">
@@ -22,12 +23,24 @@ export default function EventCard(props: { event: EventItem }) {
 					<p class="text-muted text-sm mt-1 leading-relaxed">{e().description}</p>
 				</Show>
 				<div class="flex flex-wrap items-center gap-x-5 gap-y-1 mt-3 font-mono text-xs text-muted">
-					<span class="inline-flex items-center gap-1.5">
-						<Icon name="calendar" size={14} /> {longDate(e().start_time)}
-					</span>
-					<span class="inline-flex items-center gap-1.5">
-						<Icon name="clock" size={14} /> {shortTime(e().start_time)} – {shortTime(e().end_time)}
-					</span>
+					<Show
+						when={multiDay()}
+						fallback={
+							<>
+								<span class="inline-flex items-center gap-1.5">
+									<Icon name="calendar" size={14} /> {longDate(e().start_time)}
+								</span>
+								<span class="inline-flex items-center gap-1.5">
+									<Icon name="clock" size={14} /> {shortTime(e().start_time)} – {shortTime(e().end_time)}
+								</span>
+							</>
+						}
+					>
+						<span class="inline-flex items-center gap-1.5">
+							<Icon name="calendar" size={14} />
+							{shortDate(e().start_time)} {shortTime(e().start_time)} – {shortDate(e().end_time)} {shortTime(e().end_time)}
+						</span>
+					</Show>
 					<Show when={e().location}>
 						<span class="inline-flex items-center gap-1.5">
 							<Icon name="pin" size={14} /> {e().location}
@@ -35,7 +48,7 @@ export default function EventCard(props: { event: EventItem }) {
 					</Show>
 					<Show when={e().host_name}>
 						<span class="inline-flex items-center gap-1.5">
-							{e().host_name}
+							<Icon name="person" size={14} /> {e().host_name}
 						</span>
 					</Show>
 				</div>
