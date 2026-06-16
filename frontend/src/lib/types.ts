@@ -8,18 +8,14 @@ export interface Member {
 	email: string;
 }
 
-export type EventCategory = "Social" | "Vortrag" | "Workshop" | "Gaming" | "Sonstiges";
-
 export interface EventItem {
-	id: string;
+	id: number;
 	title: string;
-	category: EventCategory;
-	description: string;
-	date: string; // ISO-Datum, z. B. "2026-06-05"
-	time: string; // z. B. "19:00 Uhr"
-	location: string;
-	capacity: number;
-	taken: number;
+	description: string | null;
+	start_time: string;
+	end_time: string;
+	location: string | null;
+	host_name: string | null;
 }
 
 export type InventoryStatus = "available" | "borrowed";

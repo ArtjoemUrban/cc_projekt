@@ -5,6 +5,7 @@ import Card from "../components/ui/Card.astro";
 import Badge from "../components/ui/Badge.astro";
 import LocationCard from "../components/office/LocationCard.astro";
 import { getOpeningHours } from "../lib/api/openingHours";
+import { ACTION_ERROR_CODES } from "astro:actions";
 
 const room = {
 	label: "FS-Büro",
@@ -97,7 +98,7 @@ try {
 		</div>
 
 		<p class="text-muted text-sm leading-relaxed px-1">
-			Außerhalb der Zeiten erreichst du uns jederzeit per <a href="fse@rwu.de" class="text-accent hover:underline">Mail</a> oder <a href="https://www.instagram.com/fachschaft/" class="text-accent hover:underline">Instagram</a>. In der
+			Außerhalb der Zeiten erreichst du uns jederzeit per <a href="mailto:fse@rwu.de" class="text-accent hover:underline">Mail</a> oder <a href="https://www.instagram.com/fachschaft_e/" class="text-accent hover:underline">Instagram</a>. In der
 			vorlesungsfreien Zeit gelten Sonderzeiten.
 		</p>
 	</div>

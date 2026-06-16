@@ -1,6 +1,6 @@
 ---
 import Card from "../ui/Card.astro";
-import { dateParts, longDate } from "../../lib/format";
+import { dateParts, longDate, shortTime } from "../../lib/format";
 import type { EventItem } from "../../lib/types";
 
 const API_URL = "http://localhost:3000";
@@ -13,16 +13,15 @@ try {
 	if (!res.ok) throw new Error();
 	const events: EventItem[] = await res.json();
 
-	const today = new Date().toISOString().slice(0, 10);
+	const now = new Date().toISOString();
 	nextEvent = events
-		.filter((e) => e.date >= today)
-		.sort((a, b) => a.date.localeCompare(b.date))[0] ?? null;
+		.filter((e) => e.start_time >= now)
+		.sort((a, b) => a.start_time.localeCompare(b.start_time))[0] ?? null;
 } catch {
 	error = true;
 }
 
-const parts = nextEvent ? dateParts(nextEvent.date) : null;
-const full = nextEvent ? nextEvent.taken >= nextEvent.capacity : false;
+const parts = nextEvent ? dateParts(nextEvent.start_time) : null;
 ---
 
 <Card class="p-6">
@@ -42,30 +41,12 @@ const full = nextEvent ? nextEvent.taken >= nextEvent.capacity : false;
 
 			<!-- Inhalt -->
 			<div class="flex-1 min-w-0">
-				<div class="flex flex-wrap items-center gap-2 mb-1">
-					<span class="font-semibold truncate">{nextEvent.title}</span>
-					<span class="bg-accent-soft text-accent px-2 py-0.5 rounded-full text-xs font-mono shrink-0">
-						{nextEvent.category}
-					</span>
-				</div>
-				<p class="font-mono text-xs text-muted">{longDate(nextEvent.date)} · {nextEvent.time}</p>
-				<p class="font-mono text-xs text-muted mt-0.5">{nextEvent.location}</p>
-				<div class="flex items-center justify-between mt-3">
-					<span class="font-mono text-xs text-muted">
-						{nextEvent.taken}/{nextEvent.capacity} Plätze
-					</span>
-					<a
-						href="/events"
-						class:list={[
-							"text-xs font-medium px-3 py-1.5 rounded-ui transition-colors",
-							full
-								? "bg-surface-2 text-muted border border-line"
-								: "bg-accent text-accent-contrast hover:bg-accent-strong",
-						]}
-					>
-						{full ? "Ausgebucht" : "Mehr erfahren"}
-					</a>
-				</div>
+				<span class="font-semibold truncate block">{nextEvent.title}</span>
+				<p class="font-mono text-xs text-muted mt-0.5">
+					{longDate(nextEvent.start_time)} · {shortTime(nextEvent.start_time)} – {shortTime(nextEvent.end_time)}
+				</p>
+				{nextEvent.location && <p class="font-mono text-xs text-muted mt-0.5">{nextEvent.location}</p>}
+				{nextEvent.host_name && <p class="font-mono text-xs text-muted mt-0.5">{nextEvent.host_name}</p>}
 			</div>
 		</div>
 	)}

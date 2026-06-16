@@ -38,6 +38,7 @@ export default function AdminEvents(props: { onFlash: (msg: string, ok?: boolean
 	const [events, { refetch }] = createResource(getEvents);
 	const [editingId, setEditingId] = createSignal<number | null>(null);
 	const [form, setForm] = createStore<EventForm>(emptyForm());
+	const [dateError, setDateError] = createSignal("");
 
 	const startEdit = (ev: any) => {
 		setEditingId(ev.id);
@@ -54,10 +55,21 @@ export default function AdminEvents(props: { onFlash: (msg: string, ok?: boolean
 	const reset = () => {
 		setEditingId(null);
 		setForm(emptyForm());
+		setDateError("");
+	};
+
+	const onStartChange = (val: string) => {
+		setForm("start_time", val);
+		if (!form.end_time) setForm("end_time", val);
 	};
 
 	const submit = async (e: Event) => {
 		e.preventDefault();
+		if (form.start_time && form.end_time && new Date(form.end_time) <= new Date(form.start_time)) {
+			setDateError("Das Ende muss nach dem Start liegen.");
+			return;
+		}
+		setDateError("");
 		const payload = {
 			title: form.title.trim(),
 			start_time: form.start_time,
@@ -105,11 +117,14 @@ export default function AdminEvents(props: { onFlash: (msg: string, ok?: boolean
 					</label>
 					<label class={labelClass}>
 						<span class="font-medium">Start</span>
-						<input class={inputClass} type="datetime-local" value={form.start_time} onInput={(e) => setForm("start_time", e.currentTarget.value)} required />
+						<input class={inputClass} type="datetime-local" value={form.start_time} onInput={(e) => onStartChange(e.currentTarget.value)} required />
 					</label>
 					<label class={labelClass}>
 						<span class="font-medium">Ende</span>
-						<input class={inputClass} type="datetime-local" value={form.end_time} onInput={(e) => setForm("end_time", e.currentTarget.value)} required />
+						<input class={inputClass} type="datetime-local" value={form.end_time} min={form.start_time} onInput={(e) => { setForm("end_time", e.currentTarget.value); setDateError(""); }} required />
+						<Show when={dateError()}>
+							<span class="text-red-500 text-xs">{dateError()}</span>
+						</Show>
 					</label>
 					<label class={labelClass}>
 						<span class="font-medium">Ort</span>
