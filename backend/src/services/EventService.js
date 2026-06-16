@@ -20,15 +20,15 @@ export default class EventService {
       throw new AppError(400, "Missing required fields: title, start_time, end_time");
     }
     const result = this.db.prepare(
-      "INSERT INTO events (title, description, start_time, end_time, location, host_id, host_name, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
-    ).run(title, description ?? null, start_time, end_time, location ?? null, host_id ?? null, host_name ?? null, userId);
+      "INSERT INTO events (title, description, start_time, end_time, location, host_id, host_name) VALUES (?, ?, ?, ?, ?, ?, ?)"
+    ).run(title, description ?? null, start_time, end_time, location ?? null, host_id ?? null, host_name ?? null);
     return { message: "Event created successfully", id: result.lastInsertRowid };
   }
 
   update(id, body, userId) {
     const existing = this.getById(id);
     this.db.prepare(
-      "UPDATE events SET title=?, start_time=?, end_time=?, location=?, description=?, host_id=?, host_name=?, updated_by=?, updated_at=CURRENT_TIMESTAMP WHERE id=?"
+      "UPDATE events SET title=?, start_time=?, end_time=?, location=?, description=?, host_id=?, host_name=?, updated_at=CURRENT_TIMESTAMP WHERE id=?"
     ).run(
       body.title ?? existing.title,
       body.start_time ?? existing.start_time,
@@ -37,7 +37,6 @@ export default class EventService {
       body.description ?? existing.description,
       body.host_id ?? existing.host_id,
       body.host_name ?? existing.host_name,
-      userId,
       id
     );
     return { message: "Event updated successfully" };

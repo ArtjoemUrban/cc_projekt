@@ -1,17 +1,15 @@
 ---
-// Generiert mit Claude Opus 4.8
 import Layout from "../layouts/Layout.astro";
 import PageHeader from "../components/ui/PageHeader.astro";
 import EventsBoard from "../components/events/EventsBoard.tsx";
-import { events, eventCategories } from "../data/events";
 ---
 
 <Layout title="Events">
 	<PageHeader
 		eyebrow="Kalender"
 		title="Events"
-		description="Partys, Vorträge, Workshops und Spieleabende – melde dich direkt an. Die Plätze sind begrenzt, also sei schnell."
+		description="Partys, Vorträge, Workshops und Spieleabende – hier findest du alle geplanten Events der Fachschaft."
 	/>
 
-	<EventsBoard events={events} categories={eventCategories} client:load />
+	<EventsBoard client:load />
 </Layout>

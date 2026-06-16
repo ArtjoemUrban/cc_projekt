@@ -18,3 +18,8 @@ export function longDate(iso: string) {
 		year: "numeric",
 	});
 }
+
+/** ISO-Datetime -> "19:00". */
+export function shortTime(iso: string) {
+	return new Date(iso).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" });
+}
