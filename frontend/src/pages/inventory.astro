@@ -1,18 +1,7 @@
 ---
-// Generiert mit Claude Opus 4.8
 import Layout from "../layouts/Layout.astro";
 import PageHeader from "../components/ui/PageHeader.astro";
-import StatCard from "../components/ui/StatCard.astro";
 import InventoryBoard from "../components/inventory/InventoryBoard.tsx";
-import { inventory, inventoryCategories } from "../data/inventory";
-
-const total = inventory.length;
-const available = inventory.filter((i) => i.status === "available").length;
-const borrowed = total - available;
-const categoryCount = new Set(inventory.map((i) => i.category)).size;
-
-// Auf true setzen, sobald der Admin eingeloggt ist (Backend folgt).
-const isAdmin = false;
 ---
 
 <Layout title="Inventar">
@@ -22,17 +11,5 @@ const isAdmin = false;
 		description="Beamer, Spielkonsolen, Werkzeug und mehr – als eingeschriebene:r Studierende:r kannst du vieles kostenlos ausleihen. Schau, was gerade verfügbar ist."
 	/>
 
-	<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-		<StatCard value={total} label="Gegenstände" />
-		<StatCard value={available} label="verfügbar" />
-		<StatCard value={borrowed} label="ausgeliehen" />
-		<StatCard value={categoryCount} label="Kategorien" />
-	</div>
-
-	<InventoryBoard
-		items={inventory}
-		categories={[...inventoryCategories]}
-		admin={isAdmin}
-		client:load
-	/>
+	<InventoryBoard client:load />
 </Layout>

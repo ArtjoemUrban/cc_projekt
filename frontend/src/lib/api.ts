@@ -61,7 +61,28 @@ export async function getInventory() {
 	return request("/inventory");
 }
 
-export async function getInventoryItem(id: string) {
+export async function createBorrowForGuest(payload: {
+	item_id: number;
+	guest_name: string;
+	guest_email: string;
+	quantity: number;
+	start_date: string;
+	end_date: string;
+}) {
+	return request("/borrows/guest", { method: "POST", body: payload });
+}
+
+export async function createBorrowForUser(payload: {
+	item_id: number;
+	user_id: number;
+	quantity: number;
+	start_date: string;
+	end_date: string;
+}) {
+	return request("/borrows/user", { method: "POST", body: payload, auth: true });
+}
+
+export async function getInventoryItem(id: number) {
 	return request(`/inventory/${id}`);
 }
 
@@ -170,6 +191,28 @@ export async function updateBoardMember(id: number, payload: Record<string, unkn
 
 export async function deleteBoardMember(id: number) {
 	return request(`/board-members/${id}`, { method: "DELETE", auth: true });
+}
+
+/* -------------------------- Verleih (Admin) --------------------------- */
+
+export async function getBorrows() {
+	return request("/borrows", { auth: true });
+}
+
+export async function approveBorrow(id: number) {
+	return request(`/borrows/${id}/approve`, { method: "PUT", auth: true });
+}
+
+export async function rejectBorrow(id: number) {
+	return request(`/borrows/${id}/reject`, { method: "PUT", auth: true });
+}
+
+export async function returnBorrow(id: number) {
+	return request(`/borrows/${id}/return`, { method: "PUT", auth: true });
+}
+
+export async function deleteBorrow(id: number) {
+	return request(`/borrows/${id}`, { method: "DELETE", auth: true });
 }
 
 /* ----------------------- Öffnungszeiten (Admin) ----------------------- */

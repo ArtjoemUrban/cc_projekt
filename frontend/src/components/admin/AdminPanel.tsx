@@ -3,15 +3,17 @@ import { clearToken, getPayload } from "../../lib/auth";
 import { getMe } from "../../lib/api";
 import AdminEvents from "./AdminEvents";
 import AdminInventory from "./AdminInventory";
+import AdminBorrows from "./AdminBorrows";
 import AdminHours from "./AdminHours";
 import AdminBoard from "./AdminBoard";
 import AdminUsers from "./AdminUsers";
 
-type Tab = "events" | "inventory" | "hours" | "board" | "users";
+type Tab = "events" | "inventory" | "borrows" | "hours" | "board" | "users";
 
 const MEMBER_TABS: { id: Tab; label: string }[] = [
 	{ id: "events", label: "Events" },
 	{ id: "inventory", label: "Inventar" },
+	{ id: "borrows", label: "Verleih" },
 	{ id: "hours", label: "Öffnungszeiten" },
 ];
 
@@ -133,6 +135,9 @@ export default function AdminPanel() {
 						</Match>
 						<Match when={activeTab() === "inventory"}>
 							<AdminInventory onFlash={showFlash} />
+						</Match>
+						<Match when={activeTab() === "borrows"}>
+							<AdminBorrows onFlash={showFlash} />
 						</Match>
 						<Match when={activeTab() === "hours"}>
 							<AdminHours onFlash={showFlash} />

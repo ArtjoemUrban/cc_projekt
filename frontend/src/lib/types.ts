@@ -18,14 +18,34 @@ export interface EventItem {
 	host_name: string | null;
 }
 
-export type InventoryStatus = "available" | "borrowed";
-
 export interface InventoryItem {
-	id: string;
+	id: number;
 	name: string;
 	category: string;
-	description: string;
-	status: InventoryStatus;
+	description: string | null;
+	quantity: number;
+	quantity_available: number;
+	picture_url: string | null;
+	is_for_borrow: number;
+}
+
+export type BorrowStatus = "pending" | "borrowed" | "returned" | "overdue" | "rejected";
+
+export interface BorrowItem {
+	id: number;
+	item_id: number;
+	item_name?: string;
+	item_category?: string;
+	user_id: number | null;
+	guest_name: string | null;
+	guest_email: string | null;
+	quantity: number;
+	start_date: string;
+	end_date: string | null;
+	status: BorrowStatus;
+	comment: string | null;
+	created_at: string;
+	updated_at: string;
 }
 
 export interface OpeningDay {

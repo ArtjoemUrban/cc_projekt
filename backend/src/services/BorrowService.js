@@ -28,7 +28,12 @@ export default class BorrowService {
   #returnTransaction;
 
   getAll() {
-    return this.db.prepare("SELECT * FROM borrows").all();
+    return this.db.prepare(`
+      SELECT b.*, i.name AS item_name, i.category AS item_category
+      FROM borrows b
+      LEFT JOIN inventory i ON b.item_id = i.id
+      ORDER BY b.created_at DESC
+    `).all();
   }
 
   createForUser({ item_id, user_id, quantity, start_date, end_date }) {
