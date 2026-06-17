@@ -4,11 +4,12 @@ import EventCard from "./EventCard";
 import type { EventItem } from "../../lib/types";
 
 export default function EventsBoard() {
-	const [events] = createResource<EventItem[]>(getEvents);
+	const [rawEvents] = createResource<EventItem[]>(getEvents);
+	const events = () => [...(rawEvents() ?? [])].sort((a, b) => a.start_time.localeCompare(b.start_time));
 
 	return (
 		<div class="flex flex-col gap-4">
-			<Show when={!events.loading} fallback={<p class="text-muted text-center py-10">Lade Events…</p>}>
+			<Show when={!rawEvents.loading} fallback={<p class="text-muted text-center py-10">Lade Events…</p>}>
 				<Show
 					when={(events() ?? []).length > 0}
 					fallback={<p class="text-muted text-center py-10">Aktuell keine Events geplant.</p>}

@@ -6,6 +6,7 @@ import Hero from "../components/home/Hero.astro";
 import RoomStatusCard from "../components/home/RoomStatusCard.astro";
 import NextEventCard from "../components/home/NextEventCard.astro";
 import LocationCard from "../components/office/LocationCard.astro";
+import { Image } from "astro:assets";
 import gruppenbild from "../assets/based_man.jpg";
 ---
 
@@ -15,7 +16,7 @@ import gruppenbild from "../assets/based_man.jpg";
 
 		<div class="flex flex-col gap-6">
 			<Card class="overflow-hidden">
-				<img src={gruppenbild.src} alt="Fachschaftsgruppenbild" class="w-full h-200 object-cover object-[center_400%]" />
+				<Image src={gruppenbild} alt="Fachschaftsgruppenbild" class="w-full h-200 object-cover object-[center_400%]" fetchpriority="high" loading="eager" />
 			</Card>
 			<RoomStatusCard />
 			<NextEventCard />

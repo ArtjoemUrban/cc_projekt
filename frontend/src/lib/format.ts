@@ -23,3 +23,8 @@ export function longDate(iso: string) {
 export function shortTime(iso: string) {
 	return new Date(iso).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" });
 }
+
+/** ISO-Datetime -> "Fr., 20.06." (Kurzform für mehrtägige Zeiträume). */
+export function shortDate(iso: string) {
+	return new Date(iso).toLocaleDateString("de-DE", { weekday: "short", day: "2-digit", month: "2-digit" });
+}
