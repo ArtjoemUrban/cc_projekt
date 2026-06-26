@@ -39,11 +39,11 @@ try {
 <Layout title="Öffnungszeiten">
 	<div class="flex flex-col flex-1 gap-6">
 		<PageHeader
-			eyebrow={room.label}
 			title="Öffnungszeiten"
+			description="Unser Büro steht für alle offen – hier könnt ihr lernen, die Pausen verbringen oder neue Freunde finden. Hier siehst du, wann es offen ist."
 		/>
 
-		<div class="grid lg:grid-cols-2 lg:grid-rows-[auto_1fr] gap-6 flex-1">
+		<div class="grid lg:grid-cols-2 lg:grid-rows-[auto_1fr] gap-6">
 			<!-- Aktueller Status: auf Mobile zuerst, auf Desktop rechts oben -->
 			<Card class="p-6 lg:col-start-2 lg:row-start-1">
 				<p class:list={["flex items-center gap-2 font-medium", open ? "text-accent" : "text-muted"]}>

@@ -1,17 +1,9 @@
 ---
-// Generiert mit Claude Opus 4.8
 import Card from "../ui/Card.astro";
-import Badge from "../ui/Badge.astro";
 import Button from "../ui/Button.astro";
-import Courses from "./Courses.astro";
 ---
 
 <Card class="p-8 lg:p-10 flex flex-col gap-6">
-	<div class="flex flex-wrap gap-2">
-		<Badge variant="accent">Fachschaft E · RWU</Badge>
-		<Badge variant="muted">Informatik &amp; Elektrotechnik</Badge>
-	</div>
-
 	<h1 class="text-4xl sm:text-5xl font-extrabold leading-[1.1]">
 		Deine <span class="text-accent">Fachschaft</span> für Informatik &amp; Elektrotechnik
 	</h1>
@@ -24,31 +16,12 @@ import Courses from "./Courses.astro";
 	</p>
 
 	<div class="flex flex-wrap gap-3">
-		<Button href="/member">Lern uns kennen</Button>
+		<Button href="/fachschaft">Zur Fachschaft</Button>
 		<Button href="/events" variant="outline">Zu den Events</Button>
 		<Button href="/inventory" variant="outline">Verleih</Button>
-		<Button href="https://www.instagram.com/fachschaft_e/" variant="outline" target="_blank" rel="noopener noreferrer">
-			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block mr-1.5 -mt-0.5"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+		<Button href="https://www.instagram.com/fachschaft_e/" variant="ghost" target="_blank" rel="noopener noreferrer">
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
 			Instagram
 		</Button>
 	</div>
-
-	<Card class="p-6 flex flex-col gap-4">
-		<div>
-			<h2 class="font-mono text-xs tracking-[0.2em] uppercase text-muted mb-3">Sitzung</h2>
-			<p class="text-sm leading-relaxed mb-3">
-				Unsere Sitzungen sind offen für alle die Interesse haben. Kommt auch gerne einfach mal vorbei um euch einen Eindruck zu machen.
-			</p>
-			<p class="font-mono text-sm text-accent">i. d. R. jeden Dienstag, 13:20 – 14:00 Uhr</p>
-		</div>
-		<div>
-			<h2 class="font-mono text-xs tracking-[0.2em] uppercase text-muted mb-3">Stammtisch</h2>
-			<p class="text-sm leading-relaxed mb-3">
-				Unser Stammtisch ist offen für alle die Interesse haben. Kommt auch gerne einfach mal vorbei um euch einen Eindruck zu machen.
-			</p>
-			<p class="font-mono text-sm text-accent">i. d. R. jeden Dienstag, 13:20 – 14:00 Uhr</p>
-		</div>
-	</Card>
-
-	<Courses />
 </Card>
