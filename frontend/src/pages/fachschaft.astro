@@ -1,0 +1,188 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageHeader from "../components/ui/PageHeader.astro";
+import MemberCard from "../components/members/MemberCard.astro";
+import { getBoardMembers } from "../lib/api/boardMembers";
+import { bachelorPrograms, masterPrograms } from "../data/studiengaenge_e";
+
+let members: Awaited<ReturnType<typeof getBoardMembers>> = [];
+let error: string | null = null;
+
+try {
+	members = await getBoardMembers();
+} catch (e) {
+	error = e instanceof Error ? e.message : "Fehler beim Laden der Mitglieder";
+}
+---
+
+<Layout title="Die Fachschaft">
+	<PageHeader
+		title="Die Fachschaft"
+		description="Wir sind die studentische Interessenvertretung des Fachbereichs Elektrotechnik und Informatik an der RWU."
+	/>
+
+	<!-- Über uns + Studiengänge nebeneinander -->
+	<div class="grid lg:grid-cols-2 gap-10 mb-16 items-start lg:items-stretch">
+
+		<!-- Über uns -->
+		<section>
+			<h2 class="text-2xl font-bold mb-6">Was wir machen</h2>
+			<div class="space-y-4 text-muted leading-relaxed text-lg">
+				<p>
+					Die Fachschaft Elektrotechnik und Informatik vertritt die Interessen aller Studierenden des Fachbereichs
+					gegenüber der Hochschule, den Professoren und der Hochschulpolitik. Wir sind Ansprechpartner bei
+					Prüfungsfragen, organisieren Events und sorgen dafür, dass studentisches Leben an der RWU stattfindet.
+				</p>
+				<p>
+					Was genau wir machen, hängt immer davon ab, wer gerade in der Fachschaft sitzt und wie sehr sich die
+					Personen engagieren. Momentan blüht die Fachschaft stark auf – von Spieleabenden über Vorträge bis hin
+					zu großen Semesterpartys ist alles dabei.
+				</p>
+				<p>
+					Du hast Lust mitzumachen? Komm einfach zu unserer nächsten Sitzung vorbei – sie ist offen für alle
+					Studierenden, ohne Anmeldung.
+				</p>
+			</div>
+
+			<div class="mt-8 grid sm:grid-cols-2 gap-4">
+				<div class="border border-line rounded-ui p-5">
+					<p class="font-mono text-xs tracking-[0.2em] uppercase text-muted mb-2">Sitzung</p>
+					<p class="text-sm leading-relaxed mb-2">Offen für alle Studierenden. Keine Anmeldung nötig.</p>
+					<p class="font-mono text-sm text-accent">i. d. R. jeden Dienstag, 13:20 – 14:00 Uhr</p>
+				</div>
+				<div class="border border-line rounded-ui p-5">
+					<p class="font-mono text-xs tracking-[0.2em] uppercase text-muted mb-2">Stammtisch</p>
+					<p class="text-sm leading-relaxed mb-2">Entspanntes Beisammensein außerhalb der Uni.</p>
+					<p class="font-mono text-sm text-accent">Termine über Instagram &amp; Aushang</p>
+				</div>
+			</div>
+		</section>
+
+		<!-- Studiengänge Card -->
+		<div class="lg:relative">
+		<div class="bg-surface border border-line rounded-ui-lg p-6 flex flex-col gap-6 lg:absolute lg:inset-0 lg:overflow-hidden">
+			<div class="shrink-0">
+				<h2 class="text-2xl font-bold mb-1">Studiengänge</h2>
+				<p class="text-muted text-sm">Diese Studiengänge gehören zu unserem Fachbereich.</p>
+			</div>
+
+			<div class="flex flex-col gap-6 lg:flex-1 lg:min-h-0 lg:overflow-y-auto">
+				<div>
+					<h3 class="font-mono text-xs tracking-[0.2em] uppercase text-muted mb-3">Bachelor</h3>
+					<ul class="space-y-1">
+						{bachelorPrograms.map((p) => (
+							<li>
+								<a
+									href={p.url}
+									target="_blank"
+									rel="noreferrer"
+									class="flex items-center gap-3 px-3 py-2.5 rounded-ui no-underline transition-colors hover:bg-accent-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+								>
+									<span class="font-mono font-bold text-accent shrink-0 w-10 text-sm">{p.code}</span>
+									<span class="flex-1 text-sm">{p.name}</span>
+								</a>
+							</li>
+						))}
+					</ul>
+				</div>
+
+				<div>
+					<h3 class="font-mono text-xs tracking-[0.2em] uppercase text-muted mb-3">Master</h3>
+					<ul class="space-y-1">
+						{masterPrograms.map((p) => (
+							<li>
+								<a
+									href={p.url}
+									target="_blank"
+									rel="noreferrer"
+									class="flex items-center gap-3 px-3 py-2.5 rounded-ui no-underline transition-colors hover:bg-accent-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+								>
+									<span class="font-mono font-bold text-accent shrink-0 w-10 text-sm">{p.code}</span>
+									<span class="flex-1 text-sm">{p.name}</span>
+								</a>
+							</li>
+						))}
+					</ul>
+				</div>
+			</div>
+		</div>
+		</div>
+
+	</div>
+
+	<!-- Team -->
+	<section>
+		<h2 class="text-2xl font-bold mb-2">Das Team</h2>
+		<p class="text-muted mb-8">
+			Diese Menschen halten die Fachschaft am Laufen – von Hochschulpolitik über Events bis zum Equipment-Verleih.
+			Schreib uns einfach, wenn du Fragen hast oder mitmachen willst.
+		</p>
+
+		<div
+			id="lightbox"
+			class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 backdrop-blur-sm"
+			role="dialog"
+			aria-modal="true"
+		>
+			<button
+				id="lightbox-close"
+				class="absolute top-4 right-4 text-white text-3xl leading-none font-bold hover:opacity-70 transition-opacity"
+				aria-label="Schließen"
+			>&times;</button>
+			<img
+				id="lightbox-img"
+				src=""
+				alt=""
+				class="max-w-[90vw] max-h-[90vh] rounded-xl object-contain shadow-2xl"
+			/>
+		</div>
+
+		{error ? (
+			<p class="text-red-500">{error}</p>
+		) : members.length === 0 ? (
+			<p class="text-muted">Noch keine Mitglieder eingetragen.</p>
+		) : (
+			<div class="flex flex-wrap justify-center gap-4">
+				{members.map((member) => (
+					<div class="w-full sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.667rem)] flex flex-col">
+						<MemberCard member={member} />
+					</div>
+				))}
+			</div>
+		)}
+	</section>
+</Layout>
+
+<script>
+	const lightbox = document.getElementById("lightbox")!;
+	const lightboxImg = document.getElementById("lightbox-img") as HTMLImageElement;
+	const closeBtn = document.getElementById("lightbox-close")!;
+
+	function open(src: string, alt: string) {
+		lightboxImg.src = src;
+		lightboxImg.alt = alt;
+		lightbox.classList.remove("hidden");
+		lightbox.classList.add("flex");
+		document.body.style.overflow = "hidden";
+	}
+
+	function close() {
+		lightbox.classList.add("hidden");
+		lightbox.classList.remove("flex");
+		document.body.style.overflow = "";
+	}
+
+	document.querySelectorAll<HTMLImageElement>("[data-lightbox-src]").forEach((img) => {
+		img.addEventListener("click", () => {
+			open(img.dataset.lightboxSrc!, img.dataset.lightboxAlt ?? "");
+		});
+	});
+
+	closeBtn.addEventListener("click", close);
+	lightbox.addEventListener("click", (e) => {
+		if (e.target === lightbox) close();
+	});
+	document.addEventListener("keydown", (e) => {
+		if (e.key === "Escape") close();
+	});
+</script>

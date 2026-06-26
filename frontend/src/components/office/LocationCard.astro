@@ -8,18 +8,21 @@ const room = {
 };
 ---
 
-<Card class="overflow-hidden h-full flex flex-col">
-	<div class="p-6 flex items-start gap-4 border-b border-line shrink-0">
-		<span class="grid place-items-center size-10 rounded-ui-sm bg-surface-2 border border-line text-accent shrink-0">
-			<Icon name="pin" />
-		</span>
-		<div>
-			<p class="font-semibold">{room.building}</p>
-			<p class="text-muted text-sm">{room.detail}</p>
+<Card class="overflow-hidden flex flex-col h-full">
+	<div class="p-5 flex flex-col gap-4 border-b border-line shrink-0">
+		<h2 class="font-semibold">Wo du uns findest</h2>
+		<div class="flex items-start gap-3">
+			<span class="grid place-items-center size-9 rounded-ui-sm bg-surface-2 border border-line text-accent shrink-0">
+				<Icon name="pin" />
+			</span>
+			<div>
+				<p class="font-semibold text-sm">{room.building}</p>
+				<p class="text-muted text-xs">{room.detail}</p>
+			</div>
 		</div>
 	</div>
 
-	<div class="relative flex-1 min-h-32">
+	<div class="relative flex-1 min-h-40">
 		<iframe
 			title="Standort Fachschaft E – Gebäude K, RWU Weingarten"
 			src="https://www.openstreetmap.org/export/embed.html?bbox=9.6481%2C47.8112%2C9.6531%2C47.8142&layer=mapnik&marker=47.812708%2C9.650567"
@@ -31,7 +34,7 @@ const room = {
 			href="https://www.openstreetmap.org/?mlat=47.812708&mlon=9.650567#map=19/47.812708/9.650567"
 			target="_blank"
 			rel="noopener noreferrer"
-			class="absolute bottom-2 right-2 text-xs bg-surface-1 border border-line rounded px-2 py-1 text-muted hover:text-accent transition-colors"
+			class="absolute bottom-2 right-2 text-xs bg-surface border border-line rounded px-2 py-1 text-muted hover:text-accent transition-colors"
 		>
 			Größere Karte
 		</a>
