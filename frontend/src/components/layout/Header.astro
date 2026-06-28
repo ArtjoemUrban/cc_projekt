@@ -1,8 +1,8 @@
 ---
-// Generiert mit Claude Opus 4.8
 import Brand from "./Brand.astro";
 import NavLink from "./NavLink.astro";
 import ThemeToggle from "./ThemeToggle.tsx";
+import Icon from "../ui/Icon.astro";
 import type { IconName } from "../../lib/icons";
 
 interface Props {
@@ -17,18 +17,108 @@ const links: { label: string; href: string; icon: IconName }[] = [
 	{ label: "Events", href: "/events", icon: "calendar" },
 	{ label: "Inventar", href: "/inventory", icon: "box" },
 	{ label: "Öffnungszeiten", href: "/office-hours", icon: "clock" },
-	//{ label: "Anmelden", href: "/login", icon: "lock" },
 ];
+
+const normalize = (p: string) => (p?.length > 1 ? p.replace(/\/$/, "") : p || "/");
 ---
 
 <header class="sticky top-0 z-30 bg-bg/80 backdrop-blur border-b border-line">
 	<div class="px-4 md:px-8 h-16 flex items-center gap-6">
 		<Brand />
+
+		<!-- Desktop Nav -->
 		<nav class="hidden md:flex items-center gap-1">
 			{links.map((link) => <NavLink {...link} currentPath={currentPath} />)}
 		</nav>
-		<div class="ml-auto">
+
+		<!-- Desktop ThemeToggle -->
+		<div class="ml-auto hidden md:block">
+			<ThemeToggle client:load />
+		</div>
+
+		<!-- Mobile Hamburger Button -->
+		<button
+			id="mobile-menu-btn"
+			type="button"
+			aria-label="Menü öffnen"
+			aria-expanded="false"
+			aria-controls="mobile-menu"
+			class="ml-auto md:hidden grid place-items-center size-10 rounded-full text-muted hover:text-text hover:bg-surface-2 transition-colors cursor-pointer"
+		>
+			<svg id="icon-menu" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+				<line x1="3" y1="6" x2="21" y2="6"/>
+				<line x1="3" y1="12" x2="21" y2="12"/>
+				<line x1="3" y1="18" x2="21" y2="18"/>
+			</svg>
+			<svg id="icon-close" class="hidden" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+				<line x1="18" y1="6" x2="6" y2="18"/>
+				<line x1="6" y1="6" x2="18" y2="18"/>
+			</svg>
+		</button>
+	</div>
+
+	<!-- Mobile Menu -->
+	<div
+		id="mobile-menu"
+		class="md:hidden hidden absolute left-0 right-0 top-full bg-bg border-b border-line shadow-lg"
+		aria-hidden="true"
+	>
+		<nav class="px-4 py-3 flex flex-col gap-1">
+			{links.map((link) => {
+				const active = normalize(currentPath) === normalize(link.href);
+				return (
+					<a
+						href={link.href}
+						class:list={[
+							"flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors",
+							active ? "bg-accent-soft text-accent" : "text-muted hover:text-text hover:bg-surface-2",
+						]}
+					>
+						<Icon name={link.icon} size={18} />
+						{link.label}
+					</a>
+				);
+			})}
+		</nav>
+		<div class="px-4 py-3 border-t border-line flex justify-end">
 			<ThemeToggle client:load />
 		</div>
 	</div>
 </header>
+
+<script>
+	const btn = document.getElementById('mobile-menu-btn') as HTMLButtonElement | null;
+	const menu = document.getElementById('mobile-menu');
+	const iconMenu = document.getElementById('icon-menu');
+	const iconClose = document.getElementById('icon-close');
+
+	function openMenu() {
+		menu?.classList.remove('hidden');
+		menu?.setAttribute('aria-hidden', 'false');
+		btn?.setAttribute('aria-expanded', 'true');
+		btn?.setAttribute('aria-label', 'Menü schließen');
+		iconMenu?.classList.add('hidden');
+		iconClose?.classList.remove('hidden');
+	}
+
+	function closeMenu() {
+		menu?.classList.add('hidden');
+		menu?.setAttribute('aria-hidden', 'true');
+		btn?.setAttribute('aria-expanded', 'false');
+		btn?.setAttribute('aria-label', 'Menü öffnen');
+		iconMenu?.classList.remove('hidden');
+		iconClose?.classList.add('hidden');
+	}
+
+	btn?.addEventListener('click', () => {
+		menu?.classList.contains('hidden') ? openMenu() : closeMenu();
+	});
+
+	menu?.querySelectorAll('a').forEach(link => {
+		link.addEventListener('click', closeMenu);
+	});
+
+	window.addEventListener('resize', () => {
+		if (window.innerWidth >= 768) closeMenu();
+	});
+</script>
