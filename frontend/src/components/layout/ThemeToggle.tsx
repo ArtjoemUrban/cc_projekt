@@ -1,18 +1,22 @@
-// Generiert mit Claude Opus 4.8
-import { createSignal, onMount } from "solid-js";
+import { createSignal, onMount, onCleanup } from "solid-js";
 import Icon from "../ui/Icon";
 
-/** Schaltet zwischen Dark/Light um und merkt sich die Wahl im localStorage. */
 export default function ThemeToggle() {
 	const [dark, setDark] = createSignal(true);
 
-	onMount(() => setDark(document.documentElement.classList.contains("dark")));
+	onMount(() => {
+		setDark(document.documentElement.classList.contains("dark"));
+
+		const handler = (e: Event) => setDark((e as CustomEvent<{ dark: boolean }>).detail.dark);
+		window.addEventListener('theme-change', handler);
+		onCleanup(() => window.removeEventListener('theme-change', handler));
+	});
 
 	const toggle = () => {
-		const el = document.documentElement;
-		const isDark = el.classList.toggle("dark");
+		const isDark = document.documentElement.classList.toggle("dark");
 		localStorage.setItem("theme", isDark ? "dark" : "light");
 		setDark(isDark);
+		window.dispatchEvent(new CustomEvent('theme-change', { detail: { dark: isDark } }));
 	};
 
 	return (

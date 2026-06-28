@@ -132,9 +132,9 @@ export default function InventoryBoard() {
 						{ value: stats().borrowed, label: "ausgeliehen" },
 						{ value: stats().categories, label: "Kategorien" },
 					].map(({ value, label }) => (
-						<div class="bg-surface border border-line rounded-ui p-6 text-center">
-							<div class="font-display text-4xl font-bold text-accent">{value}</div>
-							<div class="text-sm text-muted mt-1">{label}</div>
+						<div class="bg-surface border border-line rounded-ui p-4 sm:p-6 text-center">
+							<div class="font-display text-2xl sm:text-4xl font-bold text-accent">{value}</div>
+							<div class="text-xs sm:text-sm text-muted mt-1">{label}</div>
 						</div>
 					))}
 				</div>
