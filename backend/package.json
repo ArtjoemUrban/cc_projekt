@@ -8,7 +8,8 @@
     "dev": "nodemon src/server.js",
     "dbinit": "node src/db/dbinit2.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "seed": "node src/db/dbSeed.js"
+    "seed": "node src/db/dbSeed.js",
+    "seed:test-data": "node src/db/seedTestData.js"
   },
   "keywords": [],
   "author": "",

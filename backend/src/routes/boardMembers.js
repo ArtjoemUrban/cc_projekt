@@ -37,6 +37,10 @@ export default function boardMembersRoutes(db) {
     res.json(service.update(Number(req.params.id), req.body));
   }));
 
+  router.delete("/:id/image", verifyJwt, isAdmin, wrap(async (req, res) => {
+    res.json(service.removeImage(Number(req.params.id)));
+  }));
+
   router.delete("/:id", verifyJwt, isAdmin, wrap(async (req, res) => {
     res.json(service.delete(Number(req.params.id)));
   }));
