@@ -10,7 +10,7 @@ const TOKEN_KEY = "fse_token";
 export interface JwtPayload {
 	id: number;
 	username: string;
-	role: "admin" | "contributor" | "member";
+	role: "admin" | "member";
 	iat?: number;
 	exp?: number;
 }

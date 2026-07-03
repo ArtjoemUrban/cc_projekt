@@ -16,7 +16,7 @@ import openingHoursRoutes from './routes/openingHours.js';
 import calendarPeriodsRoutes from './routes/calendarPeriods.js';
 import boardMembersRoutes from './routes/boardMembers.js';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = dirname(fileURLToPath(import.meta.url)); 
 
 dotenv.config();
 seedAdminUser(db);
@@ -24,7 +24,8 @@ seedAdminUser(db);
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use('/uploads', express.static(join(__dirname, '../uploads')));
+// für uploads (Bilder)
+app.use('/uploads', express.static(join(__dirname, '../uploads'))); // Serve static files from the uploads directory
 
 app.use('/opening-hours', openingHoursRoutes(db));
 app.use('/events', eventsRoutes(db));

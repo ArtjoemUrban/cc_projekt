@@ -17,7 +17,7 @@ type UserForm = {
 
 const emptyForm = (): UserForm => ({ prename: "", surname: "", email: "", username: "", password: "" });
 
-const ROLES = ["admin", "contributor", "member"] as const;
+const ROLES = ["admin", "member"] as const;
 
 export default function AdminUsers(props: { onFlash: (msg: string, ok?: boolean) => void }) {
 	const [users, { refetch }] = createResource(getUsers);

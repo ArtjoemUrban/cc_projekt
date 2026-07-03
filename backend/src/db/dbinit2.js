@@ -9,7 +9,7 @@ function dbinit(db) {
         email TEXT NOT NULL UNIQUE,
         username TEXT NOT NULL UNIQUE,
         password TEXT NOT NULL, -- hash des Passworts
-        role TEXT NOT NULL CHECK (role IN ('admin', 'contributor', 'member')),
+        role TEXT NOT NULL CHECK (role IN ('admin', 'member')),
         created_at TEXT DEFAULT CURRENT_TIMESTAMP,
         updated_at TEXT DEFAULT CURRENT_TIMESTAMP
     )`);

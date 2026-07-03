@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import AppError from "../errors/AppError.js";
 
-const ALLOWED_ROLES = ["admin", "contributor", "member"];
+const ALLOWED_ROLES = ["admin", "member"];
 
 export default class UserService {
   constructor(db) {

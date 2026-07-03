@@ -1,6 +1,6 @@
 import { createResource, createSignal, For, Show } from "solid-js";
 import { createStore } from "solid-js/store";
-import { getAllBoardMembers, createBoardMember, updateBoardMember, deleteBoardMember, uploadBoardMemberImage } from "../../lib/api";
+import { getAllBoardMembers, createBoardMember, updateBoardMember, deleteBoardMember, uploadBoardMemberImage, removeBoardMemberImage } from "../../lib/api";
 
 const API_URL = "http://localhost:3000";
 const inputClass = "w-full bg-surface-2 border border-line rounded-ui px-3 py-2 outline-none focus:border-accent transition-colors text-sm";
@@ -46,6 +46,30 @@ export default function AdminBoard(props: { onFlash: (msg: string, ok?: boolean)
 		setForm(emptyForm());
 		setPreviewUrl(null);
 		if (fileInput) fileInput.value = "";
+	};
+
+	const removeImage = async () => {
+		if (fileInput?.files?.[0]) {
+			fileInput.value = "";
+			setPreviewUrl(form.image_path ? `${API_URL}${form.image_path}` : null);
+			return;
+		}
+		if (!form.image_path) return;
+		if (editingId() === null) {
+			setForm("image_path", "");
+			setPreviewUrl(null);
+			return;
+		}
+		if (!confirm("Bild wirklich entfernen?")) return;
+		try {
+			await removeBoardMemberImage(editingId()!);
+			setForm("image_path", "");
+			setPreviewUrl(null);
+			props.onFlash("Bild entfernt.");
+			refetch();
+		} catch (err) {
+			props.onFlash((err as Error).message, false);
+		}
 	};
 
 	const submit = async (e: Event) => {
@@ -133,6 +157,9 @@ export default function AdminBoard(props: { onFlash: (msg: string, ok?: boolean)
 									}}
 								/>
 							</label>
+							<Show when={previewUrl()}>
+								<button type="button" class={btnDanger} onClick={removeImage}>Bild entfernen</button>
+							</Show>
 						</div>
 					</div>
 					<label class={labelClass}>

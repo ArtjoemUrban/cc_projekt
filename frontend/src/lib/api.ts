@@ -193,6 +193,10 @@ export async function deleteBoardMember(id: number) {
 	return request(`/board-members/${id}`, { method: "DELETE", auth: true });
 }
 
+export async function removeBoardMemberImage(id: number) {
+	return request(`/board-members/${id}/image`, { method: "DELETE", auth: true });
+}
+
 /* -------------------------- Verleih (Admin) --------------------------- */
 
 export async function getBorrows() {
