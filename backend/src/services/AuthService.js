@@ -1,23 +1,23 @@
 import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
+import bcrypt from "bcrypt"; // Hashing
 import AppError from "../errors/AppError.js";
 
 export default class AuthService {
   constructor(db) {
     this.db = db;
   }
-
+  // 400 (Bad Request) 409 (Conflict) 
   async register({ prename, surname, email, username, password }) {
     if (!prename || !surname || !email || !username || !password) {
       throw new AppError(400, "Missing required fields: prename, surname, email, username, password");
     }
-    if (this.db.prepare("SELECT id FROM users WHERE username = ?").get(username)) {
+    if (this.db.prepare("SELECT id FROM users WHERE username = ?").get(username)) { // ? Platzhalter (SQL Injection)
       throw new AppError(409, "Username already exists");
     }
     if (this.db.prepare("SELECT id FROM users WHERE email = ?").get(email)) {
       throw new AppError(409, "Email already exists");
     }
-    const passwordHash = await bcrypt.hash(password, 10);
+    const passwordHash = await bcrypt.hash(password, 10); // 10 salt-rounds
     const result = this.db.prepare(
       "INSERT INTO users (prename, surname, email, username, password, role, created_at, updated_at) VALUES (?, ?, ?, ?, ?, 'member', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)"
     ).run(prename, surname, email, username, passwordHash);
