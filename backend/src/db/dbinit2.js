@@ -65,15 +65,6 @@ function dbinit(db) {
         FOREIGN KEY (host_id) REFERENCES users(id)
     )`);
 
-        // für zukunft
-    db.exec(`CREATE TABLE IF NOT EXISTS event_items (
-        event_id INTEGER NOT NULL,
-        item_id INTEGER NOT NULL,
-        quantity INTEGER NOT NULL,
-        PRIMARY KEY (event_id, item_id),
-        FOREIGN KEY (event_id) REFERENCES events(id),
-        FOREIGN KEY (item_id) REFERENCES inventory(id)
-    )`);
 // -- 0 = Sonntag, 6 = Samstag
     db.exec(`CREATE TABLE IF NOT EXISTS opening_hours (
         weekday INTEGER PRIMARY KEY CHECK (weekday BETWEEN 0 AND 6), 
@@ -97,27 +88,6 @@ function dbinit(db) {
         (6, '00:00', '00:00'),
         (0, '00:00', '00:00');        
     `);
-
-    db.exec(`CREATE TABLE IF NOT EXISTS calendar_periods (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        start_date TEXT NOT NULL,
-        end_date TEXT NOT NULL,
-        description TEXT,
-        type TEXT NOT NULL CHECK (type IN ('holiday', 'closed', 'exams')),
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-        updated_at TEXT DEFAULT CURRENT_TIMESTAMP
-    )`);
-
-    db.exec(`CREATE TABLE IF NOT EXISTS calendar_period_openings(
-        weekday INTEGER NOT NULL,
-        calendar_period_id INTEGER NOT NULL,
-        start_time TEXT NOT NULL,
-        end_time TEXT NOT NULL,
-        PRIMARY KEY (weekday, calendar_period_id),
-        FOREIGN KEY (weekday) REFERENCES opening_hours(weekday),
-        FOREIGN KEY (calendar_period_id) REFERENCES calendar_periods(id),
-        CHECK (time(start_time) <= time(end_time))
-    );`);
 
     db.exec(`CREATE TABLE IF NOT EXISTS board_members (
         id INTEGER PRIMARY KEY AUTOINCREMENT,

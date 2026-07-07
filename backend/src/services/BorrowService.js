@@ -29,9 +29,11 @@ export default class BorrowService {
 
   getAll() {
     return this.db.prepare(`
-      SELECT b.*, i.name AS item_name, i.category AS item_category
+      SELECT b.*, i.name AS item_name, i.category AS item_category,
+        u.prename AS user_prename, u.surname AS user_surname, u.email AS user_email
       FROM borrows b
       LEFT JOIN inventory i ON b.item_id = i.id
+      LEFT JOIN users u ON b.user_id = u.id
       ORDER BY b.created_at DESC
     `).all();
   }

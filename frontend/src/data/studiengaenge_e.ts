@@ -70,7 +70,7 @@ export const masterPrograms: StudyProgram[] = [
 	{
 		id: "emm",
 		code: "EMM",
-		name: "Elektrotechnik und Eingebettete Systeme",
+		name: "Elektrotechnik und Embedded Systems",
 		url: "https://www.rwu.de/studium/studiengaenge/electrical-engineering-and-embedded-systems-en",
 		level: "Master",
 	},

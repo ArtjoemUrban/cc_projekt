@@ -76,8 +76,6 @@ erDiagram
     USERS ||--o{ EVENTS : hosts
     USERS ||--o{ OPENING_HOURS : updates
     USERS ||--o{ BOARD_MEMBERS : linked_to
-    CALENDAR_PERIODS ||--o{ CALENDAR_PERIOD_OPENINGS : has
-    OPENING_HOURS ||--o{ CALENDAR_PERIOD_OPENINGS : overridden_by
 
     USERS {
         int id PK
@@ -121,20 +119,6 @@ erDiagram
         int weekday PK
         string open_time
         string close_time
-    }
-
-    CALENDAR_PERIODS {
-        int id PK
-        string start_date
-        string end_date
-        string type
-    }
-
-    CALENDAR_PERIOD_OPENINGS {
-        int weekday PK
-        int calendar_period_id PK
-        string start_time
-        string end_time
     }
 
     BOARD_MEMBERS {

@@ -61,7 +61,9 @@ export default function AdminBorrows(props: { onFlash: (msg: string, ok?: boolea
 	};
 
 	const borrowerLabel = (b: BorrowItem) =>
-		b.user_id ? `User #${b.user_id}` : `${b.guest_name} (${b.guest_email})`;
+		b.user_id
+			? `${b.user_prename} ${b.user_surname} (${b.user_email})`
+			: `${b.guest_name} (${b.guest_email})`;
 
 	return (
 		<div class="flex flex-col gap-6">

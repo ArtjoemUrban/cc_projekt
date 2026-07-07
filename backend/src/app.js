@@ -13,7 +13,6 @@ import authRoutes from './routes/auth.js';
 import userRoutes from './routes/user.js';
 import eventsRoutes from './routes/events.js';
 import openingHoursRoutes from './routes/openingHours.js';
-import calendarPeriodsRoutes from './routes/calendarPeriods.js';
 import boardMembersRoutes from './routes/boardMembers.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url)); 
@@ -33,7 +32,6 @@ app.use('/inventory', inventoryRoutes(db));
 app.use('/borrows', borrowRoutes(db));
 app.use('/auth', authRoutes(db));
 app.use('/user', userRoutes(db));
-app.use('/calendar-periods', calendarPeriodsRoutes(db));
 app.use('/board-members', boardMembersRoutes(db));
 
 app.use(errorHandler);

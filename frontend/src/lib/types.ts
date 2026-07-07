@@ -37,6 +37,9 @@ export interface BorrowItem {
 	item_name?: string;
 	item_category?: string;
 	user_id: number | null;
+	user_prename?: string | null;
+	user_surname?: string | null;
+	user_email?: string | null;
 	guest_name: string | null;
 	guest_email: string | null;
 	quantity: number;
